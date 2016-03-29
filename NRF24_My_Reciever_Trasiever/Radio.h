@@ -1,0 +1,267 @@
+/*
+ * Radio.h
+ *
+ * Created: 23.03.2016 10:27:37
+ *  Author: AndreyMaznyak
+ */ 
+
+
+#ifndef RADIO_H_
+#define RADIO_H_
+
+#include "NRF24L01_config_ports.h"
+#include "NRF24L01.h"
+#include <util/delay.h>
+//#include <avr/io.h>
+
+// Выбирает активное состояние (высокий уровень) на линии CE
+inline void radio_assert_ce() {
+	RADIO_PORT |= (1 << RADIO_CE); // Установка высокого уровня на линии CE
+}
+
+// Выбирает неактивное состояние (низкий уровень) на линии CE
+inline void radio_deassert_ce() {
+	RADIO_PORT &= ~(1 << RADIO_CE); // Установка низкого уровня на линии CE
+}
+
+// Поскольку функции для работы с csn не предполагается использовать в иных файлах, их можно объявить static
+
+// Выбирает активное состояние (низкий уровень) на линии CSN
+inline static void csn_assert() {
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+}
+
+// Выбирает неактивное состояние (высокий уровень) на линии CSN
+inline static void csn_deassert() {
+	RADIO_PORT |= (1 << RADIO_CSN); // Установка высокого уровня на линии CSN
+}
+
+//
+// SPI
+// 
+
+// Передаёт и принимает 1 байт по SPI, возвращает полученное значение
+uint8_t spi_send_recv(uint8_t data) {
+	for (uint8_t i = 8; i > 0; i--) {
+		if (data & 0x80)
+		SWSPI_PORT |= (1 << SWSPI_MOSI); // передача единички
+		else
+		SWSPI_PORT &= ~(1 << SWSPI_MOSI); // передача нулика
+		SWSPI_PORT |= (1 << SWSPI_SCK);
+		data <<= 1;
+		if (SWSPI_PIN & (1 << SWSPI_MISO)) // Чтение бита на линии MISO
+		data |= 1;
+		SWSPI_PORT &= ~(1 << SWSPI_SCK);
+	}
+	return data;
+}
+
+
+// Инициализирует порты
+void radio_init() {
+	RADIO_DDR |= (1 << RADIO_CSN) | (1 << RADIO_CE); // Ножки CSN и CE на выход
+	RADIO_DDR &= ~(1 < RADIO_IRQ); // IRQ - на вход
+	csn_deassert();
+	radio_deassert_ce();
+	// Инициализация программного интерфейса SPI
+	
+	SWSPI_PORT &= ~((1 << SWSPI_MOSI) | (1 << SWSPI_SCK));
+	SWSPI_DDR |= (1 << SWSPI_MOSI) | (1 << SWSPI_SCK);
+	SWSPI_DDR &= ~ (1 << SWSPI_MISO);
+	SWSPI_PORT |= (1 << SWSPI_MISO); // подтяжка на линии MISO
+	
+}
+
+// Выполняет команду cmd, и читает count байт ответа, помещая их в буфер buf, возвращает регистр статуса
+uint8_t radio_read_buf(uint8_t cmd, uint8_t * buf, uint8_t count) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+	while (count--) {
+		*(buf++) = spi_send_recv(0xFF);
+	}
+	csn_deassert();
+	return status;
+}
+
+// Выполняет команду cmd, и передаёт count байт параметров из буфера buf, возвращает регистр статуса
+uint8_t radio_write_buf(uint8_t cmd, uint8_t * buf, uint8_t count) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+	while (count--) {
+		spi_send_recv(*(buf++));
+	}
+	csn_deassert();
+	return status;
+}
+
+// Читает значение однобайтового регистра reg (от 0 до 31) и возвращает его
+uint8_t radio_readreg(uint8_t reg) {
+	csn_assert();
+	spi_send_recv((reg & 31) | R_REGISTER);
+	uint8_t answ = spi_send_recv(0xFF);
+	csn_deassert();
+	return answ;
+}
+
+// Записывает значение однобайтового регистра reg (от 0 до 31), возвращает регистр статуса
+uint8_t radio_writereg(uint8_t reg, uint8_t val) {
+	csn_assert();
+	uint8_t status = spi_send_recv((reg & 31) | W_REGISTER);
+	spi_send_recv(val);
+	csn_deassert();
+	return status;
+}
+
+// Читает count байт многобайтового регистра reg (от 0 до 31) и сохраняет его в буфер buf,
+// возвращает регистр статуса
+uint8_t radio_readreg_buf(uint8_t reg, uint8_t * buf, uint8_t count) {
+	return radio_read_buf((reg & 31) | R_REGISTER, buf, count);
+}
+
+// Записывает count байт из буфера buf в многобайтовый регистр reg (от 0 до 31), возвращает регистр статуса
+uint8_t radio_writereg_buf(uint8_t reg, uint8_t * buf, uint8_t count) {
+	return radio_write_buf((reg & 31) | W_REGISTER, buf, count);
+}
+
+// Возвращает размер данных в начале FIFO очереди приёмника
+uint8_t radio_read_rx_payload_width() {
+	csn_assert();
+	spi_send_recv(R_RX_PL_WID);
+	uint8_t answ = spi_send_recv(0xFF);
+	csn_deassert();
+	return answ;
+}
+
+// Выполняет команду. Возвращает регистр статуса
+uint8_t radio_cmd(uint8_t cmd) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+	csn_deassert();
+	return status;
+}
+
+// Возвращает 1, если на линии IRQ активный (низкий) уровень.
+uint8_t radio_is_interrupt() {
+	return (radio_cmd(NOP) & ((1 << RX_DR) | (1 << TX_DS) | (1 << MAX_RT))) ? 1 : 0;
+}
+
+// Функция производит первоначальную настройку устройства. Возвращает 1, в случае успеха, 0 в случае ошибки
+uint8_t radio_start() {
+	uint8_t self_addr[] = {0xE7, 0xE7, 0xE7, 0xE7, 0xE7}; // Собственный адрес
+	uint8_t remote_addr[] = {0xC2, 0xC2, 0xC2, 0xC2, 0xC2}; // Адрес удалённой стороны
+	uint8_t chan = 3; // Номер радио-канала (в диапазоне 0 - 125)
+
+	radio_deassert_ce();
+	for(uint8_t cnt = 100;;) {
+		radio_writereg(CONFIG, (1 << EN_CRC) | (1 << CRCO) | (1 << PRIM_RX)); // Выключение питания
+		if (radio_readreg(CONFIG) == ((1 << EN_CRC) | (1 << CRCO) | (1 << PRIM_RX)))
+		break;
+		// Если прочитано не то что записано, то значит либо радио-чип ещё инициализируется, либо не работает.
+		if (!cnt--)
+		return 0; // Если после 100 попыток не удалось записать что нужно, то выходим с ошибкой
+		_delay_ms(1);
+	}
+	
+	radio_cmd(FLUSH_TX);
+	radio_cmd(FLUSH_RX);
+
+	radio_writereg(EN_AA, (1 << ENAA_P1)); // включение автоподтверждения только по каналу 1
+	radio_writereg(EN_RXADDR, (1 << ERX_P0) | (1 << ERX_P1)); // включение каналов 0 и 1
+	radio_writereg(SETUP_AW, SETUP_AW_5BYTES_ADDRESS); // выбор длины адреса 5 байт
+	radio_writereg(SETUP_RETR, SETUP_RETR_DELAY_500MKS | SETUP_RETR_UP_TO_15_RETRANSMIT);
+	radio_writereg(RF_CH, chan); // Выбор частотного канала
+	radio_writereg(RF_SETUP, RF_SETUP_1MBPS | RF_SETUP_0DBM); // выбор скорости 1 Мбит/с и мощности 0dBm
+	
+	radio_writereg_buf(RX_ADDR_P0, &remote_addr[0], 5); // Подтверждения приходят на канал 0
+	radio_writereg_buf(TX_ADDR, &remote_addr[0], 5);
+
+	radio_writereg_buf(RX_ADDR_P1, &self_addr[0], 5);
+	
+	radio_writereg(RX_PW_P0, 32);
+	radio_writereg(RX_PW_P1, 32);
+	radio_writereg(DYNPD, (1 << DPL_P0) | (1 << DPL_P1)); // включение произвольной длины для каналов 0 и 1
+	radio_writereg(FEATURE, 0x06/*0x04*/); // разрешение произвольной длины пакета данных
+
+	radio_writereg(CONFIG,  0b00001111); // Включение питания (1 << EN_CRC) | (1 << CRCO) | (1 << PWR_UP) | (1 << PRIM_RX)
+	return (radio_readreg(CONFIG) == ((1 << EN_CRC) | (1 << CRCO) | (1 << PWR_UP) | (1 << PRIM_RX))) ? 1 : 0;
+}
+
+// Помещает пакет в очередь отправки.
+// buf - буфер с данными, size - длина данных (от 1 до 32)
+uint8_t send_data(uint8_t * buf, uint8_t size) {
+	radio_deassert_ce(); // Если в режиме приёма, то выключаем его
+	uint8_t conf = radio_readreg(CONFIG);
+	if (!(conf & (1 << PWR_UP))) // Если питание по какой-то причине отключено, возвращаемся с ошибкой
+	return 0;
+	uint8_t status = radio_writereg(CONFIG, conf & ~(1 << PRIM_RX)); // Сбрасываем бит PRIM_RX
+	if (status & (1 << TX_FULL_STATUS))  // Если очередь передатчика заполнена, возвращаемся с ошибкой
+	return 0;
+	radio_write_buf(W_ACK_PAYLOAD/*W_TX_PAYLOAD*/, buf, size); // Запись данных на отправку
+	radio_assert_ce(); // Импульс на линии CE приведёт к началу передачи
+	_delay_us(15); // Нужно минимум 10мкс, возьмём с запасом
+	radio_deassert_ce();
+	return 1;
+}
+
+// Вызывается, когда превышено число попыток отправки, а подтверждение так и не было получено.
+void on_send_error() {
+	// TODO здесь можно описать обработчик неудачной отправки
+	PORTD &= ~(1<<7);
+	_delay_ms(300);
+}
+
+// Вызывается при получении нового пакета по каналу 1 от удалённой стороны.
+// buf - буфер с данными, size - длина данных (от 1 до 32)
+void on_packet(uint8_t * buf, uint8_t size) {
+	// TODO здесь нужно написать обработчик принятого пакета
+
+	// Если предполагается немедленная отправка ответа, то необходимо обеспечить задержку ,
+	// во время которой чип отправит подтверждение о приёме
+	// чтобы с момента приёма пакета до перевода в режим PTX прошло:
+	// 130мкс + ((длина_адреса + длина_CRC + длина_данных_подтверждения) * 8 + 17) / скорость_обмена
+	// При типичных условиях и частоте МК 8 мГц достаточно дополнительной задержки 100мкс
+	_delay_ms(200);
+	buf[0]++;
+	buf[1] = size;
+	//Запись страницы
+	send_data(buf, size);
+}
+
+void check_radio() {
+	if (!radio_is_interrupt()) // Если прерывания нет, то не задерживаемся
+	return;
+	uint8_t status = radio_cmd(NOP);
+	radio_writereg(STATUS, status); // Просто запишем регистр обратно, тем самым сбросив биты прерываний
+	
+	if (status & ((1 << TX_DS) | (1 << MAX_RT))) { // Завершена передача успехом, или нет,
+		if (status & (1 << MAX_RT)) { // Если достигнуто максимальное число попыток
+			radio_cmd(FLUSH_TX); // Удалим последний пакет из очереди
+			on_send_error(); // Вызовем обработчик
+		}
+		if (!(radio_readreg(FIFO_STATUS) & (1 << TX_EMPTY))) { // Если в очереди передатчика есть что передавать
+			radio_assert_ce(); // Импульс на линии CE приведёт к началу передачи
+			_delay_us(15); // Нужно минимум 10мкс, возьмём с запасом
+			radio_deassert_ce();
+			} else {
+			uint8_t conf = radio_readreg(CONFIG);
+			radio_writereg(CONFIG, conf | (1 << PRIM_RX)); // Устанавливаем бит PRIM_RX: приём
+			radio_assert_ce(); // Высокий уровень на линии CE переводит радио-чип в режим приёма
+		}
+	}
+	uint8_t protect = 4; // В очереди FIFO не должно быть более 3 пакетов. Если больше, значит что-то не так
+	while (((status & (7 << RX_P_NO)) != (7 << RX_P_NO)) && protect--) { // Пока в очереди есть принятый пакет
+		uint8_t l = radio_read_rx_payload_width(); // Узнаём длину пакета
+		if (l > 32) { // Ошибка. Такой пакет нужно сбросить
+			radio_cmd(FLUSH_RX);
+			} else {
+			uint8_t buf[32]; // буфер для принятого пакета
+			radio_read_buf(R_RX_PAYLOAD, &buf[0], l); // начитывается пакет
+			if ((status & (7 << RX_P_NO)) == (1 << RX_P_NO)) { // если datapipe 1
+				on_packet(&buf[0], l); // вызываем обработчик полученного пакета
+			}
+		}
+		status = radio_cmd(NOP);
+	}
+}
+
+#endif /* RADIO_H_ */

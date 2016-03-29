@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "NRF24_My_Reciever_Trasiever", "NRF24_My_Reciever_Trasiever\NRF24_My_Reciever_Trasiever.cproj", "{E9E4C95E-E895-43FF-8FC6-4475FEA9F8DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9E4C95E-E895-43FF-8FC6-4475FEA9F8DE}.Debug|AVR.ActiveCfg = Debug|AVR
+		{E9E4C95E-E895-43FF-8FC6-4475FEA9F8DE}.Debug|AVR.Build.0 = Debug|AVR
+		{E9E4C95E-E895-43FF-8FC6-4475FEA9F8DE}.Release|AVR.ActiveCfg = Debug|AVR
+		{E9E4C95E-E895-43FF-8FC6-4475FEA9F8DE}.Release|AVR.Build.0 = Debug|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

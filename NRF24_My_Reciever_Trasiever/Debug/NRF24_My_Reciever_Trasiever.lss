@@ -1,0 +1,1117 @@
+
+NRF24_My_Reciever_Trasiever.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000462  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000000a  00800060  00000462  000004f6  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000005  0080006a  0080006a  00000500  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000500  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000530  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 000000c0  00000000  00000000  0000056c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   0000105a  00000000  00000000  0000062c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000002ba  00000000  00000000  00001686  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000454  00000000  00000000  00001940  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  0000029c  00000000  00000000  00001d94  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000038b  00000000  00000000  00002030  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000bfa  00000000  00000000  000023bb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 000000b0  00000000  00000000  00002fb5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	86 c1       	rjmp	.+780    	; 0x310 <__vector_1>
+   4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+   6:	2a c0       	rjmp	.+84     	; 0x5c <__bad_interrupt>
+   8:	29 c0       	rjmp	.+82     	; 0x5c <__bad_interrupt>
+   a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+   c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+   e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+  10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+  12:	24 c0       	rjmp	.+72     	; 0x5c <__bad_interrupt>
+  14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+  16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+  18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+  1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+  1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+  1e:	1e c0       	rjmp	.+60     	; 0x5c <__bad_interrupt>
+  20:	1d c0       	rjmp	.+58     	; 0x5c <__bad_interrupt>
+  22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+  24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e2 e6       	ldi	r30, 0x62	; 98
+  3a:	f4 e0       	ldi	r31, 0x04	; 4
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	aa 36       	cpi	r26, 0x6A	; 106
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+
+00000048 <__do_clear_bss>:
+  48:	20 e0       	ldi	r18, 0x00	; 0
+  4a:	aa e6       	ldi	r26, 0x6A	; 106
+  4c:	b0 e0       	ldi	r27, 0x00	; 0
+  4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
+
+00000050 <.do_clear_bss_loop>:
+  50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+  52:	af 36       	cpi	r26, 0x6F	; 111
+  54:	b2 07       	cpc	r27, r18
+  56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+  58:	d7 d1       	rcall	.+942    	; 0x408 <main>
+  5a:	01 c2       	rjmp	.+1026   	; 0x45e <_exit>
+
+0000005c <__bad_interrupt>:
+  5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <spi_send_recv>:
+#include <util/delay.h>
+//#include <avr/io.h>
+
+// Выбирает активное состояние (высокий уровень) на линии CE
+inline void radio_assert_ce() {
+	RADIO_PORT |= (1 << RADIO_CE); // Установка высокого уровня на линии CE
+  5e:	98 e0       	ldi	r25, 0x08	; 8
+  60:	88 23       	and	r24, r24
+			radio_writereg(CONFIG, conf | (1 << PRIM_RX)); // Устанавливаем бит PRIM_RX: приём
+			radio_assert_ce(); // Высокий уровень на линии CE переводит радио-чип в режим приёма
+		}
+	}
+	uint8_t protect = 4; // В очереди FIFO не должно быть более 3 пакетов. Если больше, значит что-то не так
+	while (((status & (7 << RX_P_NO)) != (7 << RX_P_NO)) && protect--) { // Пока в очереди есть принятый пакет
+  62:	14 f4       	brge	.+4      	; 0x68 <spi_send_recv+0xa>
+		uint8_t l = radio_read_rx_payload_width(); // Узнаём длину пакета
+  64:	c3 9a       	sbi	0x18, 3	; 24
+  66:	01 c0       	rjmp	.+2      	; 0x6a <spi_send_recv+0xc>
+		if (l > 32) { // Ошибка. Такой пакет нужно сбросить
+  68:	c3 98       	cbi	0x18, 3	; 24
+  6a:	c5 9a       	sbi	0x18, 5	; 24
+  6c:	88 0f       	add	r24, r24
+			radio_cmd(FLUSH_RX);
+  6e:	b4 99       	sbic	0x16, 4	; 22
+  70:	81 60       	ori	r24, 0x01	; 1
+  72:	c5 98       	cbi	0x18, 5	; 24
+			} else {
+			uint8_t buf[32]; // буфер для принятого пакета
+			radio_read_buf(R_RX_PAYLOAD, &buf[0], l); // начитывается пакет
+  74:	91 50       	subi	r25, 0x01	; 1
+  76:	a1 f7       	brne	.-24     	; 0x60 <spi_send_recv+0x2>
+  78:	08 95       	ret
+
+0000007a <radio_init>:
+  7a:	87 b3       	in	r24, 0x17	; 23
+  7c:	83 60       	ori	r24, 0x03	; 3
+  7e:	87 bb       	out	0x17, r24	; 23
+			if ((status & (7 << RX_P_NO)) == (1 << RX_P_NO)) { // если datapipe 1
+  80:	b8 98       	cbi	0x17, 0	; 23
+  82:	c1 9a       	sbi	0x18, 1	; 24
+				on_packet(&buf[0], l); // вызываем обработчик полученного пакета
+  84:	c0 98       	cbi	0x18, 0	; 24
+  86:	88 b3       	in	r24, 0x18	; 24
+  88:	87 7d       	andi	r24, 0xD7	; 215
+  8a:	88 bb       	out	0x18, r24	; 24
+			}
+		}
+		status = radio_cmd(NOP);
+  8c:	87 b3       	in	r24, 0x17	; 23
+  8e:	88 62       	ori	r24, 0x28	; 40
+			radio_writereg(CONFIG, conf | (1 << PRIM_RX)); // Устанавливаем бит PRIM_RX: приём
+			radio_assert_ce(); // Высокий уровень на линии CE переводит радио-чип в режим приёма
+		}
+	}
+	uint8_t protect = 4; // В очереди FIFO не должно быть более 3 пакетов. Если больше, значит что-то не так
+	while (((status & (7 << RX_P_NO)) != (7 << RX_P_NO)) && protect--) { // Пока в очереди есть принятый пакет
+  90:	87 bb       	out	0x17, r24	; 23
+  92:	bc 98       	cbi	0x17, 4	; 23
+  94:	c4 9a       	sbi	0x18, 4	; 24
+  96:	08 95       	ret
+
+00000098 <radio_read_buf>:
+  98:	df 92       	push	r13
+  9a:	ef 92       	push	r14
+  9c:	ff 92       	push	r15
+  9e:	0f 93       	push	r16
+  a0:	1f 93       	push	r17
+  a2:	cf 93       	push	r28
+				on_packet(&buf[0], l); // вызываем обработчик полученного пакета
+			}
+		}
+		status = radio_cmd(NOP);
+	}
+}
+  a4:	df 93       	push	r29
+  a6:	7b 01       	movw	r14, r22
+  a8:	c4 2f       	mov	r28, r20
+  aa:	c1 98       	cbi	0x18, 1	; 24
+  ac:	d8 df       	rcall	.-80     	; 0x5e <spi_send_recv>
+  ae:	d8 2e       	mov	r13, r24
+  b0:	9f ef       	ldi	r25, 0xFF	; 255
+  b2:	9c 0f       	add	r25, r28
+  b4:	cc 23       	and	r28, r28
+  b6:	69 f0       	breq	.+26     	; 0xd2 <radio_read_buf+0x3a>
+  b8:	e7 01       	movw	r28, r14
+  ba:	09 2f       	mov	r16, r25
+
+// Выполняет команду cmd, и читает count байт ответа, помещая их в буфер buf, возвращает регистр статуса
+uint8_t radio_read_buf(uint8_t cmd, uint8_t * buf, uint8_t count) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+	while (count--) {
+  bc:	10 e0       	ldi	r17, 0x00	; 0
+  be:	0f 5f       	subi	r16, 0xFF	; 255
+  c0:	1f 4f       	sbci	r17, 0xFF	; 255
+  c2:	0e 0d       	add	r16, r14
+  c4:	1f 1d       	adc	r17, r15
+		*(buf++) = spi_send_recv(0xFF);
+  c6:	8f ef       	ldi	r24, 0xFF	; 255
+  c8:	ca df       	rcall	.-108    	; 0x5e <spi_send_recv>
+  ca:	89 93       	st	Y+, r24
+
+// Выполняет команду cmd, и читает count байт ответа, помещая их в буфер buf, возвращает регистр статуса
+uint8_t radio_read_buf(uint8_t cmd, uint8_t * buf, uint8_t count) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+	while (count--) {
+  cc:	c0 17       	cp	r28, r16
+  ce:	d1 07       	cpc	r29, r17
+  d0:	d1 f7       	brne	.-12     	; 0xc6 <radio_read_buf+0x2e>
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+}
+
+// Выбирает неактивное состояние (высокий уровень) на линии CSN
+inline static void csn_deassert() {
+	RADIO_PORT |= (1 << RADIO_CSN); // Установка высокого уровня на линии CSN
+  d2:	c1 9a       	sbi	0x18, 1	; 24
+	while (count--) {
+		*(buf++) = spi_send_recv(0xFF);
+	}
+	csn_deassert();
+	return status;
+}
+  d4:	8d 2d       	mov	r24, r13
+  d6:	df 91       	pop	r29
+  d8:	cf 91       	pop	r28
+  da:	1f 91       	pop	r17
+  dc:	0f 91       	pop	r16
+  de:	ff 90       	pop	r15
+  e0:	ef 90       	pop	r14
+  e2:	df 90       	pop	r13
+  e4:	08 95       	ret
+
+000000e6 <radio_write_buf>:
+
+// Выполняет команду cmd, и передаёт count байт параметров из буфера buf, возвращает регистр статуса
+uint8_t radio_write_buf(uint8_t cmd, uint8_t * buf, uint8_t count) {
+  e6:	df 92       	push	r13
+  e8:	ef 92       	push	r14
+  ea:	ff 92       	push	r15
+  ec:	0f 93       	push	r16
+  ee:	1f 93       	push	r17
+  f0:	cf 93       	push	r28
+  f2:	df 93       	push	r29
+  f4:	7b 01       	movw	r14, r22
+  f6:	c4 2f       	mov	r28, r20
+
+// Поскольку функции для работы с csn не предполагается использовать в иных файлах, их можно объявить static
+
+// Выбирает активное состояние (низкий уровень) на линии CSN
+inline static void csn_assert() {
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+  f8:	c1 98       	cbi	0x18, 1	; 24
+}
+
+// Выполняет команду cmd, и передаёт count байт параметров из буфера buf, возвращает регистр статуса
+uint8_t radio_write_buf(uint8_t cmd, uint8_t * buf, uint8_t count) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+  fa:	b1 df       	rcall	.-158    	; 0x5e <spi_send_recv>
+  fc:	d8 2e       	mov	r13, r24
+	while (count--) {
+  fe:	9f ef       	ldi	r25, 0xFF	; 255
+ 100:	9c 0f       	add	r25, r28
+ 102:	cc 23       	and	r28, r28
+ 104:	61 f0       	breq	.+24     	; 0x11e <radio_write_buf+0x38>
+ 106:	e7 01       	movw	r28, r14
+ 108:	09 2f       	mov	r16, r25
+ 10a:	10 e0       	ldi	r17, 0x00	; 0
+ 10c:	0f 5f       	subi	r16, 0xFF	; 255
+ 10e:	1f 4f       	sbci	r17, 0xFF	; 255
+ 110:	0e 0d       	add	r16, r14
+ 112:	1f 1d       	adc	r17, r15
+		spi_send_recv(*(buf++));
+ 114:	89 91       	ld	r24, Y+
+ 116:	a3 df       	rcall	.-186    	; 0x5e <spi_send_recv>
+
+// Выполняет команду cmd, и передаёт count байт параметров из буфера buf, возвращает регистр статуса
+uint8_t radio_write_buf(uint8_t cmd, uint8_t * buf, uint8_t count) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+	while (count--) {
+ 118:	c0 17       	cp	r28, r16
+ 11a:	d1 07       	cpc	r29, r17
+ 11c:	d9 f7       	brne	.-10     	; 0x114 <radio_write_buf+0x2e>
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+}
+
+// Выбирает неактивное состояние (высокий уровень) на линии CSN
+inline static void csn_deassert() {
+	RADIO_PORT |= (1 << RADIO_CSN); // Установка высокого уровня на линии CSN
+ 11e:	c1 9a       	sbi	0x18, 1	; 24
+	while (count--) {
+		spi_send_recv(*(buf++));
+	}
+	csn_deassert();
+	return status;
+}
+ 120:	8d 2d       	mov	r24, r13
+ 122:	df 91       	pop	r29
+ 124:	cf 91       	pop	r28
+ 126:	1f 91       	pop	r17
+ 128:	0f 91       	pop	r16
+ 12a:	ff 90       	pop	r15
+ 12c:	ef 90       	pop	r14
+ 12e:	df 90       	pop	r13
+ 130:	08 95       	ret
+
+00000132 <radio_readreg>:
+
+// Поскольку функции для работы с csn не предполагается использовать в иных файлах, их можно объявить static
+
+// Выбирает активное состояние (низкий уровень) на линии CSN
+inline static void csn_assert() {
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+ 132:	c1 98       	cbi	0x18, 1	; 24
+}
+
+// Читает значение однобайтового регистра reg (от 0 до 31) и возвращает его
+uint8_t radio_readreg(uint8_t reg) {
+	csn_assert();
+	spi_send_recv((reg & 31) | R_REGISTER);
+ 134:	8f 71       	andi	r24, 0x1F	; 31
+ 136:	93 df       	rcall	.-218    	; 0x5e <spi_send_recv>
+	uint8_t answ = spi_send_recv(0xFF);
+ 138:	8f ef       	ldi	r24, 0xFF	; 255
+ 13a:	91 df       	rcall	.-222    	; 0x5e <spi_send_recv>
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+}
+
+// Выбирает неактивное состояние (высокий уровень) на линии CSN
+inline static void csn_deassert() {
+	RADIO_PORT |= (1 << RADIO_CSN); // Установка высокого уровня на линии CSN
+ 13c:	c1 9a       	sbi	0x18, 1	; 24
+	csn_assert();
+	spi_send_recv((reg & 31) | R_REGISTER);
+	uint8_t answ = spi_send_recv(0xFF);
+	csn_deassert();
+	return answ;
+}
+ 13e:	08 95       	ret
+
+00000140 <radio_writereg>:
+
+// Записывает значение однобайтового регистра reg (от 0 до 31), возвращает регистр статуса
+uint8_t radio_writereg(uint8_t reg, uint8_t val) {
+ 140:	cf 93       	push	r28
+ 142:	df 93       	push	r29
+ 144:	d6 2f       	mov	r29, r22
+
+// Поскольку функции для работы с csn не предполагается использовать в иных файлах, их можно объявить static
+
+// Выбирает активное состояние (низкий уровень) на линии CSN
+inline static void csn_assert() {
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+ 146:	c1 98       	cbi	0x18, 1	; 24
+}
+
+// Записывает значение однобайтового регистра reg (от 0 до 31), возвращает регистр статуса
+uint8_t radio_writereg(uint8_t reg, uint8_t val) {
+	csn_assert();
+	uint8_t status = spi_send_recv((reg & 31) | W_REGISTER);
+ 148:	8f 71       	andi	r24, 0x1F	; 31
+ 14a:	80 62       	ori	r24, 0x20	; 32
+ 14c:	88 df       	rcall	.-240    	; 0x5e <spi_send_recv>
+ 14e:	c8 2f       	mov	r28, r24
+	spi_send_recv(val);
+ 150:	8d 2f       	mov	r24, r29
+ 152:	85 df       	rcall	.-246    	; 0x5e <spi_send_recv>
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+}
+
+// Выбирает неактивное состояние (высокий уровень) на линии CSN
+inline static void csn_deassert() {
+	RADIO_PORT |= (1 << RADIO_CSN); // Установка высокого уровня на линии CSN
+ 154:	c1 9a       	sbi	0x18, 1	; 24
+	csn_assert();
+	uint8_t status = spi_send_recv((reg & 31) | W_REGISTER);
+	spi_send_recv(val);
+	csn_deassert();
+	return status;
+}
+ 156:	8c 2f       	mov	r24, r28
+ 158:	df 91       	pop	r29
+ 15a:	cf 91       	pop	r28
+ 15c:	08 95       	ret
+
+0000015e <radio_writereg_buf>:
+	return radio_read_buf((reg & 31) | R_REGISTER, buf, count);
+}
+
+// Записывает count байт из буфера buf в многобайтовый регистр reg (от 0 до 31), возвращает регистр статуса
+uint8_t radio_writereg_buf(uint8_t reg, uint8_t * buf, uint8_t count) {
+	return radio_write_buf((reg & 31) | W_REGISTER, buf, count);
+ 15e:	8f 71       	andi	r24, 0x1F	; 31
+ 160:	80 62       	ori	r24, 0x20	; 32
+ 162:	c1 df       	rcall	.-126    	; 0xe6 <radio_write_buf>
+}
+ 164:	08 95       	ret
+
+00000166 <radio_read_rx_payload_width>:
+
+// Поскольку функции для работы с csn не предполагается использовать в иных файлах, их можно объявить static
+
+// Выбирает активное состояние (низкий уровень) на линии CSN
+inline static void csn_assert() {
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+ 166:	c1 98       	cbi	0x18, 1	; 24
+}
+
+// Возвращает размер данных в начале FIFO очереди приёмника
+uint8_t radio_read_rx_payload_width() {
+	csn_assert();
+	spi_send_recv(R_RX_PL_WID);
+ 168:	80 e6       	ldi	r24, 0x60	; 96
+ 16a:	79 df       	rcall	.-270    	; 0x5e <spi_send_recv>
+	uint8_t answ = spi_send_recv(0xFF);
+ 16c:	8f ef       	ldi	r24, 0xFF	; 255
+ 16e:	77 df       	rcall	.-274    	; 0x5e <spi_send_recv>
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+}
+
+// Выбирает неактивное состояние (высокий уровень) на линии CSN
+inline static void csn_deassert() {
+	RADIO_PORT |= (1 << RADIO_CSN); // Установка высокого уровня на линии CSN
+ 170:	c1 9a       	sbi	0x18, 1	; 24
+	csn_assert();
+	spi_send_recv(R_RX_PL_WID);
+	uint8_t answ = spi_send_recv(0xFF);
+	csn_deassert();
+	return answ;
+}
+ 172:	08 95       	ret
+
+00000174 <radio_cmd>:
+
+// Поскольку функции для работы с csn не предполагается использовать в иных файлах, их можно объявить static
+
+// Выбирает активное состояние (низкий уровень) на линии CSN
+inline static void csn_assert() {
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+ 174:	c1 98       	cbi	0x18, 1	; 24
+}
+
+// Выполняет команду. Возвращает регистр статуса
+uint8_t radio_cmd(uint8_t cmd) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+ 176:	73 df       	rcall	.-282    	; 0x5e <spi_send_recv>
+	RADIO_PORT &= ~(1 << RADIO_CSN); // Установка низкого уровня на линии CSN
+}
+
+// Выбирает неактивное состояние (высокий уровень) на линии CSN
+inline static void csn_deassert() {
+	RADIO_PORT |= (1 << RADIO_CSN); // Установка высокого уровня на линии CSN
+ 178:	c1 9a       	sbi	0x18, 1	; 24
+uint8_t radio_cmd(uint8_t cmd) {
+	csn_assert();
+	uint8_t status = spi_send_recv(cmd);
+	csn_deassert();
+	return status;
+}
+ 17a:	08 95       	ret
+
+0000017c <radio_start>:
+uint8_t radio_is_interrupt() {
+	return (radio_cmd(NOP) & ((1 << RX_DR) | (1 << TX_DS) | (1 << MAX_RT))) ? 1 : 0;
+}
+
+// Функция производит первоначальную настройку устройства. Возвращает 1, в случае успеха, 0 в случае ошибки
+uint8_t radio_start() {
+ 17c:	1f 93       	push	r17
+ 17e:	cf 93       	push	r28
+ 180:	df 93       	push	r29
+ 182:	cd b7       	in	r28, 0x3d	; 61
+ 184:	de b7       	in	r29, 0x3e	; 62
+ 186:	2a 97       	sbiw	r28, 0x0a	; 10
+ 188:	0f b6       	in	r0, 0x3f	; 63
+ 18a:	f8 94       	cli
+ 18c:	de bf       	out	0x3e, r29	; 62
+ 18e:	0f be       	out	0x3f, r0	; 63
+ 190:	cd bf       	out	0x3d, r28	; 61
+	uint8_t self_addr[] = {0xE7, 0xE7, 0xE7, 0xE7, 0xE7}; // Собственный адрес
+ 192:	85 e0       	ldi	r24, 0x05	; 5
+ 194:	e0 e6       	ldi	r30, 0x60	; 96
+ 196:	f0 e0       	ldi	r31, 0x00	; 0
+ 198:	de 01       	movw	r26, r28
+ 19a:	11 96       	adiw	r26, 0x01	; 1
+ 19c:	01 90       	ld	r0, Z+
+ 19e:	0d 92       	st	X+, r0
+ 1a0:	8a 95       	dec	r24
+ 1a2:	e1 f7       	brne	.-8      	; 0x19c <radio_start+0x20>
+	uint8_t remote_addr[] = {0xC2, 0xC2, 0xC2, 0xC2, 0xC2}; // Адрес удалённой стороны
+ 1a4:	85 e0       	ldi	r24, 0x05	; 5
+ 1a6:	e5 e6       	ldi	r30, 0x65	; 101
+ 1a8:	f0 e0       	ldi	r31, 0x00	; 0
+ 1aa:	de 01       	movw	r26, r28
+ 1ac:	16 96       	adiw	r26, 0x06	; 6
+ 1ae:	01 90       	ld	r0, Z+
+ 1b0:	0d 92       	st	X+, r0
+ 1b2:	8a 95       	dec	r24
+ 1b4:	e1 f7       	brne	.-8      	; 0x1ae <radio_start+0x32>
+	RADIO_PORT |= (1 << RADIO_CE); // Установка высокого уровня на линии CE
+}
+
+// Выбирает неактивное состояние (низкий уровень) на линии CE
+inline void radio_deassert_ce() {
+	RADIO_PORT &= ~(1 << RADIO_CE); // Установка низкого уровня на линии CE
+ 1b6:	c0 98       	cbi	0x18, 0	; 24
+ 1b8:	15 e6       	ldi	r17, 0x65	; 101
+	uint8_t remote_addr[] = {0xC2, 0xC2, 0xC2, 0xC2, 0xC2}; // Адрес удалённой стороны
+	uint8_t chan = 3; // Номер радио-канала (в диапазоне 0 - 125)
+
+	radio_deassert_ce();
+	for(uint8_t cnt = 100;;) {
+		radio_writereg(CONFIG, (1 << EN_CRC) | (1 << CRCO) | (1 << PRIM_RX)); // Выключение питания
+ 1ba:	6d e0       	ldi	r22, 0x0D	; 13
+ 1bc:	80 e0       	ldi	r24, 0x00	; 0
+ 1be:	c0 df       	rcall	.-128    	; 0x140 <radio_writereg>
+		if (radio_readreg(CONFIG) == ((1 << EN_CRC) | (1 << CRCO) | (1 << PRIM_RX)))
+ 1c0:	80 e0       	ldi	r24, 0x00	; 0
+ 1c2:	b7 df       	rcall	.-146    	; 0x132 <radio_readreg>
+ 1c4:	8d 30       	cpi	r24, 0x0D	; 13
+ 1c6:	51 f0       	breq	.+20     	; 0x1dc <radio_start+0x60>
+ 1c8:	11 50       	subi	r17, 0x01	; 1
+		break;
+		// Если прочитано не то что записано, то значит либо радио-чип ещё инициализируется, либо не работает.
+		if (!cnt--)
+ 1ca:	09 f4       	brne	.+2      	; 0x1ce <radio_start+0x52>
+ 1cc:	44 c0       	rjmp	.+136    	; 0x256 <radio_start+0xda>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 1ce:	89 ef       	ldi	r24, 0xF9	; 249
+ 1d0:	90 e0       	ldi	r25, 0x00	; 0
+ 1d2:	01 97       	sbiw	r24, 0x01	; 1
+ 1d4:	f1 f7       	brne	.-4      	; 0x1d2 <radio_start+0x56>
+ 1d6:	00 c0       	rjmp	.+0      	; 0x1d8 <radio_start+0x5c>
+ 1d8:	00 00       	nop
+ 1da:	ef cf       	rjmp	.-34     	; 0x1ba <radio_start+0x3e>
+		return 0; // Если после 100 попыток не удалось записать что нужно, то выходим с ошибкой
+		_delay_ms(1);
+	}
+	
+	radio_cmd(FLUSH_TX);
+ 1dc:	81 ee       	ldi	r24, 0xE1	; 225
+ 1de:	ca df       	rcall	.-108    	; 0x174 <radio_cmd>
+	radio_cmd(FLUSH_RX);
+ 1e0:	82 ee       	ldi	r24, 0xE2	; 226
+ 1e2:	c8 df       	rcall	.-112    	; 0x174 <radio_cmd>
+
+	radio_writereg(EN_AA, (1 << ENAA_P1)); // включение автоподтверждения только по каналу 1
+ 1e4:	62 e0       	ldi	r22, 0x02	; 2
+ 1e6:	81 e0       	ldi	r24, 0x01	; 1
+ 1e8:	ab df       	rcall	.-170    	; 0x140 <radio_writereg>
+	radio_writereg(EN_RXADDR, (1 << ERX_P0) | (1 << ERX_P1)); // включение каналов 0 и 1
+ 1ea:	63 e0       	ldi	r22, 0x03	; 3
+ 1ec:	82 e0       	ldi	r24, 0x02	; 2
+ 1ee:	a8 df       	rcall	.-176    	; 0x140 <radio_writereg>
+	radio_writereg(SETUP_AW, SETUP_AW_5BYTES_ADDRESS); // выбор длины адреса 5 байт
+ 1f0:	63 e0       	ldi	r22, 0x03	; 3
+ 1f2:	83 e0       	ldi	r24, 0x03	; 3
+ 1f4:	a5 df       	rcall	.-182    	; 0x140 <radio_writereg>
+	radio_writereg(SETUP_RETR, SETUP_RETR_DELAY_500MKS | SETUP_RETR_UP_TO_15_RETRANSMIT);
+ 1f6:	6f e1       	ldi	r22, 0x1F	; 31
+ 1f8:	84 e0       	ldi	r24, 0x04	; 4
+ 1fa:	a2 df       	rcall	.-188    	; 0x140 <radio_writereg>
+	radio_writereg(RF_CH, chan); // Выбор частотного канала
+ 1fc:	63 e0       	ldi	r22, 0x03	; 3
+ 1fe:	85 e0       	ldi	r24, 0x05	; 5
+ 200:	9f df       	rcall	.-194    	; 0x140 <radio_writereg>
+	radio_writereg(RF_SETUP, RF_SETUP_1MBPS | RF_SETUP_0DBM); // выбор скорости 1 Мбит/с и мощности 0dBm
+ 202:	66 e0       	ldi	r22, 0x06	; 6
+ 204:	86 e0       	ldi	r24, 0x06	; 6
+ 206:	9c df       	rcall	.-200    	; 0x140 <radio_writereg>
+	
+	radio_writereg_buf(RX_ADDR_P0, &remote_addr[0], 5); // Подтверждения приходят на канал 0
+ 208:	45 e0       	ldi	r20, 0x05	; 5
+ 20a:	be 01       	movw	r22, r28
+ 20c:	6a 5f       	subi	r22, 0xFA	; 250
+ 20e:	7f 4f       	sbci	r23, 0xFF	; 255
+ 210:	8a e0       	ldi	r24, 0x0A	; 10
+ 212:	a5 df       	rcall	.-182    	; 0x15e <radio_writereg_buf>
+	radio_writereg_buf(TX_ADDR, &remote_addr[0], 5);
+ 214:	45 e0       	ldi	r20, 0x05	; 5
+ 216:	be 01       	movw	r22, r28
+ 218:	6a 5f       	subi	r22, 0xFA	; 250
+ 21a:	7f 4f       	sbci	r23, 0xFF	; 255
+ 21c:	80 e1       	ldi	r24, 0x10	; 16
+ 21e:	9f df       	rcall	.-194    	; 0x15e <radio_writereg_buf>
+
+	radio_writereg_buf(RX_ADDR_P1, &self_addr[0], 5);
+ 220:	45 e0       	ldi	r20, 0x05	; 5
+ 222:	be 01       	movw	r22, r28
+ 224:	6f 5f       	subi	r22, 0xFF	; 255
+ 226:	7f 4f       	sbci	r23, 0xFF	; 255
+ 228:	8b e0       	ldi	r24, 0x0B	; 11
+ 22a:	99 df       	rcall	.-206    	; 0x15e <radio_writereg_buf>
+	
+	radio_writereg(RX_PW_P0, 32);
+ 22c:	60 e2       	ldi	r22, 0x20	; 32
+ 22e:	81 e1       	ldi	r24, 0x11	; 17
+ 230:	87 df       	rcall	.-242    	; 0x140 <radio_writereg>
+	radio_writereg(RX_PW_P1, 32);
+ 232:	60 e2       	ldi	r22, 0x20	; 32
+ 234:	82 e1       	ldi	r24, 0x12	; 18
+ 236:	84 df       	rcall	.-248    	; 0x140 <radio_writereg>
+	radio_writereg(DYNPD, (1 << DPL_P0) | (1 << DPL_P1)); // включение произвольной длины для каналов 0 и 1
+ 238:	63 e0       	ldi	r22, 0x03	; 3
+ 23a:	8c e1       	ldi	r24, 0x1C	; 28
+ 23c:	81 df       	rcall	.-254    	; 0x140 <radio_writereg>
+	radio_writereg(FEATURE, 0x06/*0x04*/); // разрешение произвольной длины пакета данных
+ 23e:	66 e0       	ldi	r22, 0x06	; 6
+ 240:	8d e1       	ldi	r24, 0x1D	; 29
+ 242:	7e df       	rcall	.-260    	; 0x140 <radio_writereg>
+
+	radio_writereg(CONFIG,  0b00001111); // Включение питания (1 << EN_CRC) | (1 << CRCO) | (1 << PWR_UP) | (1 << PRIM_RX)
+ 244:	6f e0       	ldi	r22, 0x0F	; 15
+ 246:	80 e0       	ldi	r24, 0x00	; 0
+ 248:	7b df       	rcall	.-266    	; 0x140 <radio_writereg>
+	return (radio_readreg(CONFIG) == ((1 << EN_CRC) | (1 << CRCO) | (1 << PWR_UP) | (1 << PRIM_RX))) ? 1 : 0;
+ 24a:	80 e0       	ldi	r24, 0x00	; 0
+ 24c:	72 df       	rcall	.-284    	; 0x132 <radio_readreg>
+ 24e:	11 e0       	ldi	r17, 0x01	; 1
+ 250:	8f 30       	cpi	r24, 0x0F	; 15
+ 252:	09 f0       	breq	.+2      	; 0x256 <radio_start+0xda>
+ 254:	10 e0       	ldi	r17, 0x00	; 0
+}
+ 256:	81 2f       	mov	r24, r17
+ 258:	2a 96       	adiw	r28, 0x0a	; 10
+ 25a:	0f b6       	in	r0, 0x3f	; 63
+ 25c:	f8 94       	cli
+ 25e:	de bf       	out	0x3e, r29	; 62
+ 260:	0f be       	out	0x3f, r0	; 63
+ 262:	cd bf       	out	0x3d, r28	; 61
+ 264:	df 91       	pop	r29
+ 266:	cf 91       	pop	r28
+ 268:	1f 91       	pop	r17
+ 26a:	08 95       	ret
+
+0000026c <send_data>:
+
+// Помещает пакет в очередь отправки.
+// buf - буфер с данными, size - длина данных (от 1 до 32)
+uint8_t send_data(uint8_t * buf, uint8_t size) {
+ 26c:	1f 93       	push	r17
+ 26e:	cf 93       	push	r28
+ 270:	df 93       	push	r29
+ 272:	ec 01       	movw	r28, r24
+ 274:	16 2f       	mov	r17, r22
+	RADIO_PORT |= (1 << RADIO_CE); // Установка высокого уровня на линии CE
+}
+
+// Выбирает неактивное состояние (низкий уровень) на линии CE
+inline void radio_deassert_ce() {
+	RADIO_PORT &= ~(1 << RADIO_CE); // Установка низкого уровня на линии CE
+ 276:	c0 98       	cbi	0x18, 0	; 24
+
+// Помещает пакет в очередь отправки.
+// buf - буфер с данными, size - длина данных (от 1 до 32)
+uint8_t send_data(uint8_t * buf, uint8_t size) {
+	radio_deassert_ce(); // Если в режиме приёма, то выключаем его
+	uint8_t conf = radio_readreg(CONFIG);
+ 278:	80 e0       	ldi	r24, 0x00	; 0
+ 27a:	5b df       	rcall	.-330    	; 0x132 <radio_readreg>
+ 27c:	98 2f       	mov	r25, r24
+	if (!(conf & (1 << PWR_UP))) // Если питание по какой-то причине отключено, возвращаемся с ошибкой
+ 27e:	82 70       	andi	r24, 0x02	; 2
+ 280:	91 ff       	sbrs	r25, 1
+ 282:	12 c0       	rjmp	.+36     	; 0x2a8 <send_data+0x3c>
+	return 0;
+	uint8_t status = radio_writereg(CONFIG, conf & ~(1 << PRIM_RX)); // Сбрасываем бит PRIM_RX
+ 284:	69 2f       	mov	r22, r25
+ 286:	6e 7f       	andi	r22, 0xFE	; 254
+ 288:	80 e0       	ldi	r24, 0x00	; 0
+ 28a:	5a df       	rcall	.-332    	; 0x140 <radio_writereg>
+	if (status & (1 << TX_FULL_STATUS))  // Если очередь передатчика заполнена, возвращаемся с ошибкой
+ 28c:	80 fd       	sbrc	r24, 0
+ 28e:	0b c0       	rjmp	.+22     	; 0x2a6 <send_data+0x3a>
+	return 0;
+	radio_write_buf(W_ACK_PAYLOAD/*W_TX_PAYLOAD*/, buf, size); // Запись данных на отправку
+ 290:	41 2f       	mov	r20, r17
+ 292:	be 01       	movw	r22, r28
+ 294:	88 ea       	ldi	r24, 0xA8	; 168
+ 296:	27 df       	rcall	.-434    	; 0xe6 <radio_write_buf>
+#include <util/delay.h>
+//#include <avr/io.h>
+
+// Выбирает активное состояние (высокий уровень) на линии CE
+inline void radio_assert_ce() {
+	RADIO_PORT |= (1 << RADIO_CE); // Установка высокого уровня на линии CE
+ 298:	c0 9a       	sbi	0x18, 0	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 29a:	85 e0       	ldi	r24, 0x05	; 5
+ 29c:	8a 95       	dec	r24
+ 29e:	f1 f7       	brne	.-4      	; 0x29c <send_data+0x30>
+}
+
+// Выбирает неактивное состояние (низкий уровень) на линии CE
+inline void radio_deassert_ce() {
+	RADIO_PORT &= ~(1 << RADIO_CE); // Установка низкого уровня на линии CE
+ 2a0:	c0 98       	cbi	0x18, 0	; 24
+	return 0;
+	radio_write_buf(W_ACK_PAYLOAD/*W_TX_PAYLOAD*/, buf, size); // Запись данных на отправку
+	radio_assert_ce(); // Импульс на линии CE приведёт к началу передачи
+	_delay_us(15); // Нужно минимум 10мкс, возьмём с запасом
+	radio_deassert_ce();
+	return 1;
+ 2a2:	81 e0       	ldi	r24, 0x01	; 1
+ 2a4:	01 c0       	rjmp	.+2      	; 0x2a8 <send_data+0x3c>
+	uint8_t conf = radio_readreg(CONFIG);
+	if (!(conf & (1 << PWR_UP))) // Если питание по какой-то причине отключено, возвращаемся с ошибкой
+	return 0;
+	uint8_t status = radio_writereg(CONFIG, conf & ~(1 << PRIM_RX)); // Сбрасываем бит PRIM_RX
+	if (status & (1 << TX_FULL_STATUS))  // Если очередь передатчика заполнена, возвращаемся с ошибкой
+	return 0;
+ 2a6:	80 e0       	ldi	r24, 0x00	; 0
+	radio_write_buf(W_ACK_PAYLOAD/*W_TX_PAYLOAD*/, buf, size); // Запись данных на отправку
+	radio_assert_ce(); // Импульс на линии CE приведёт к началу передачи
+	_delay_us(15); // Нужно минимум 10мкс, возьмём с запасом
+	radio_deassert_ce();
+	return 1;
+}
+ 2a8:	df 91       	pop	r29
+ 2aa:	cf 91       	pop	r28
+ 2ac:	1f 91       	pop	r17
+ 2ae:	08 95       	ret
+
+000002b0 <on_send_error_IRQ>:
+uint32_t page = 0;
+
+// Вызывается, когда превышено число попыток отправки, а подтверждение так и не было получено.
+void on_send_error_IRQ() {
+	// TODO здесь можно описать обработчик неудачной отправки
+	PORTD &= ~(1<<7);
+ 2b0:	97 98       	cbi	0x12, 7	; 18
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 2b2:	2f e5       	ldi	r18, 0x5F	; 95
+ 2b4:	8a ee       	ldi	r24, 0xEA	; 234
+ 2b6:	90 e0       	ldi	r25, 0x00	; 0
+ 2b8:	21 50       	subi	r18, 0x01	; 1
+ 2ba:	80 40       	sbci	r24, 0x00	; 0
+ 2bc:	90 40       	sbci	r25, 0x00	; 0
+ 2be:	e1 f7       	brne	.-8      	; 0x2b8 <on_send_error_IRQ+0x8>
+ 2c0:	00 c0       	rjmp	.+0      	; 0x2c2 <on_send_error_IRQ+0x12>
+ 2c2:	00 00       	nop
+ 2c4:	08 95       	ret
+
+000002c6 <on_packet_IRQ>:
+	_delay_ms(300);
+}
+
+// Вызывается при получении нового пакета по каналу 1 от удалённой стороны.
+// buf - буфер с данными, size - длина данных (от 1 до 32)
+void on_packet_IRQ(uint8_t * buf, uint8_t size) {
+ 2c6:	0f 93       	push	r16
+ 2c8:	1f 93       	push	r17
+ 2ca:	ef e4       	ldi	r30, 0x4F	; 79
+ 2cc:	f3 ec       	ldi	r31, 0xC3	; 195
+ 2ce:	31 97       	sbiw	r30, 0x01	; 1
+ 2d0:	f1 f7       	brne	.-4      	; 0x2ce <on_packet_IRQ+0x8>
+ 2d2:	00 c0       	rjmp	.+0      	; 0x2d4 <on_packet_IRQ+0xe>
+ 2d4:	00 00       	nop
+	// При типичных условиях и частоте МК 8 мГц достаточно дополнительной задержки 100мкс
+	_delay_ms(200);
+	if(status == GET_PAGE_DATA){
+		//boot_program_page(page,buf);	
+	}
+	if(buf[0] == PAGE_NUMBER){
+ 2d6:	fc 01       	movw	r30, r24
+ 2d8:	30 81       	ld	r19, Z
+ 2da:	33 30       	cpi	r19, 0x03	; 3
+ 2dc:	a9 f4       	brne	.+42     	; 0x308 <on_packet_IRQ+0x42>
+		page = (buf[4] << 24) | (buf[3] << 16) | (buf[2] << 8) | buf[1];
+ 2de:	42 81       	ldd	r20, Z+2	; 0x02
+ 2e0:	50 e0       	ldi	r21, 0x00	; 0
+ 2e2:	54 2f       	mov	r21, r20
+ 2e4:	44 27       	eor	r20, r20
+ 2e6:	31 81       	ldd	r19, Z+1	; 0x01
+ 2e8:	43 2b       	or	r20, r19
+ 2ea:	8a 01       	movw	r16, r20
+ 2ec:	55 0f       	add	r21, r21
+ 2ee:	22 0b       	sbc	r18, r18
+ 2f0:	33 0b       	sbc	r19, r19
+ 2f2:	00 93 6a 00 	sts	0x006A, r16
+ 2f6:	10 93 6b 00 	sts	0x006B, r17
+ 2fa:	20 93 6c 00 	sts	0x006C, r18
+ 2fe:	30 93 6d 00 	sts	0x006D, r19
+		status = GET_PAGE_DATA; 
+ 302:	34 e0       	ldi	r19, 0x04	; 4
+ 304:	30 93 6e 00 	sts	0x006E, r19
+	}
+	//Запись страницы
+	send_data(buf, size);
+ 308:	b1 df       	rcall	.-158    	; 0x26c <send_data>
+}
+ 30a:	1f 91       	pop	r17
+ 30c:	0f 91       	pop	r16
+ 30e:	08 95       	ret
+
+00000310 <__vector_1>:
+
+
+ISR(INT0_vect)
+{
+ 310:	1f 92       	push	r1
+ 312:	0f 92       	push	r0
+ 314:	0f b6       	in	r0, 0x3f	; 63
+ 316:	0f 92       	push	r0
+ 318:	11 24       	eor	r1, r1
+ 31a:	ff 92       	push	r15
+ 31c:	0f 93       	push	r16
+ 31e:	1f 93       	push	r17
+ 320:	2f 93       	push	r18
+ 322:	3f 93       	push	r19
+ 324:	4f 93       	push	r20
+ 326:	5f 93       	push	r21
+ 328:	6f 93       	push	r22
+ 32a:	7f 93       	push	r23
+ 32c:	8f 93       	push	r24
+ 32e:	9f 93       	push	r25
+ 330:	af 93       	push	r26
+ 332:	bf 93       	push	r27
+ 334:	ef 93       	push	r30
+ 336:	ff 93       	push	r31
+ 338:	cf 93       	push	r28
+ 33a:	df 93       	push	r29
+ 33c:	cd b7       	in	r28, 0x3d	; 61
+ 33e:	de b7       	in	r29, 0x3e	; 62
+ 340:	a0 97       	sbiw	r28, 0x20	; 32
+ 342:	de bf       	out	0x3e, r29	; 62
+ 344:	cd bf       	out	0x3d, r28	; 61
+	cli();
+ 346:	f8 94       	cli
+	PORTD|= 1<<7;
+ 348:	97 9a       	sbi	0x12, 7	; 18
+	uint8_t status = radio_cmd(NOP);
+ 34a:	8f ef       	ldi	r24, 0xFF	; 255
+ 34c:	13 df       	rcall	.-474    	; 0x174 <radio_cmd>
+ 34e:	18 2f       	mov	r17, r24
+	radio_writereg(STATUS, status); // Просто запишем регистр обратно, тем самым сбросив биты прерываний
+ 350:	68 2f       	mov	r22, r24
+ 352:	87 e0       	ldi	r24, 0x07	; 7
+ 354:	f5 de       	rcall	.-534    	; 0x140 <radio_writereg>
+	
+	if (status & ((1 << TX_DS) | (1 << MAX_RT))) { // Завершена передача успехом, или нет,
+ 356:	81 2f       	mov	r24, r17
+ 358:	80 73       	andi	r24, 0x30	; 48
+ 35a:	b1 f1       	breq	.+108    	; 0x3c8 <__vector_1+0xb8>
+		if (status & (1 << MAX_RT)) { // Если достигнуто максимальное число попыток
+ 35c:	14 ff       	sbrs	r17, 4
+ 35e:	03 c0       	rjmp	.+6      	; 0x366 <__vector_1+0x56>
+			radio_cmd(FLUSH_TX); // Удалим последний пакет из очереди
+ 360:	81 ee       	ldi	r24, 0xE1	; 225
+ 362:	08 df       	rcall	.-496    	; 0x174 <radio_cmd>
+			on_send_error_IRQ(); // Вызовем обработчик
+ 364:	a5 df       	rcall	.-182    	; 0x2b0 <on_send_error_IRQ>
+		}
+		if (!(radio_readreg(FIFO_STATUS) & (1 << TX_EMPTY))) { // Если в очереди передатчика есть что передавать
+ 366:	87 e1       	ldi	r24, 0x17	; 23
+ 368:	e4 de       	rcall	.-568    	; 0x132 <radio_readreg>
+ 36a:	84 fd       	sbrc	r24, 4
+ 36c:	06 c0       	rjmp	.+12     	; 0x37a <__vector_1+0x6a>
+#include <util/delay.h>
+//#include <avr/io.h>
+
+// Выбирает активное состояние (высокий уровень) на линии CE
+inline void radio_assert_ce() {
+	RADIO_PORT |= (1 << RADIO_CE); // Установка высокого уровня на линии CE
+ 36e:	c0 9a       	sbi	0x18, 0	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 370:	85 e0       	ldi	r24, 0x05	; 5
+ 372:	8a 95       	dec	r24
+ 374:	f1 f7       	brne	.-4      	; 0x372 <__vector_1+0x62>
+}
+
+// Выбирает неактивное состояние (низкий уровень) на линии CE
+inline void radio_deassert_ce() {
+	RADIO_PORT &= ~(1 << RADIO_CE); // Установка низкого уровня на линии CE
+ 376:	c0 98       	cbi	0x18, 0	; 24
+ 378:	27 c0       	rjmp	.+78     	; 0x3c8 <__vector_1+0xb8>
+			radio_assert_ce(); // Импульс на линии CE приведёт к началу передачи
+			_delay_us(15); // Нужно минимум 10мкс, возьмём с запасом
+			radio_deassert_ce();
+			} else {
+			uint8_t conf = radio_readreg(CONFIG);
+ 37a:	80 e0       	ldi	r24, 0x00	; 0
+ 37c:	da de       	rcall	.-588    	; 0x132 <radio_readreg>
+			radio_writereg(CONFIG, conf | (1 << PRIM_RX)); // Устанавливаем бит PRIM_RX: приём
+ 37e:	68 2f       	mov	r22, r24
+ 380:	61 60       	ori	r22, 0x01	; 1
+ 382:	80 e0       	ldi	r24, 0x00	; 0
+ 384:	dd de       	rcall	.-582    	; 0x140 <radio_writereg>
+#include <util/delay.h>
+//#include <avr/io.h>
+
+// Выбирает активное состояние (высокий уровень) на линии CE
+inline void radio_assert_ce() {
+	RADIO_PORT |= (1 << RADIO_CE); // Установка высокого уровня на линии CE
+ 386:	c0 9a       	sbi	0x18, 0	; 24
+ 388:	1f c0       	rjmp	.+62     	; 0x3c8 <__vector_1+0xb8>
+			radio_assert_ce(); // Высокий уровень на линии CE переводит радио-чип в режим приёма
+		}
+	}
+	uint8_t protect = 4; // В очереди FIFO не должно быть более 3 пакетов. Если больше, значит что-то не так
+	while (((status & (7 << RX_P_NO)) != (7 << RX_P_NO)) && protect--) { // Пока в очереди есть принятый пакет
+ 38a:	04 e0       	ldi	r16, 0x04	; 4
+		uint8_t l = radio_read_rx_payload_width(); // Узнаём длину пакета
+ 38c:	ec de       	rcall	.-552    	; 0x166 <radio_read_rx_payload_width>
+ 38e:	f8 2e       	mov	r15, r24
+		if (l > 32) { // Ошибка. Такой пакет нужно сбросить
+ 390:	80 e2       	ldi	r24, 0x20	; 32
+ 392:	8f 15       	cp	r24, r15
+ 394:	18 f4       	brcc	.+6      	; 0x39c <__vector_1+0x8c>
+			radio_cmd(FLUSH_RX);
+ 396:	82 ee       	ldi	r24, 0xE2	; 226
+ 398:	ed de       	rcall	.-550    	; 0x174 <radio_cmd>
+ 39a:	0c c0       	rjmp	.+24     	; 0x3b4 <__vector_1+0xa4>
+			} else {
+			uint8_t buf[32]; // буфер для принятого пакета
+			radio_read_buf(R_RX_PAYLOAD, &buf[0], l); // начитывается пакет
+ 39c:	4f 2d       	mov	r20, r15
+ 39e:	be 01       	movw	r22, r28
+ 3a0:	6f 5f       	subi	r22, 0xFF	; 255
+ 3a2:	7f 4f       	sbci	r23, 0xFF	; 255
+ 3a4:	81 e6       	ldi	r24, 0x61	; 97
+ 3a6:	78 de       	rcall	.-784    	; 0x98 <radio_read_buf>
+			if ((status & (7 << RX_P_NO)) == (1 << RX_P_NO)) { // если datapipe 1
+ 3a8:	12 30       	cpi	r17, 0x02	; 2
+ 3aa:	21 f4       	brne	.+8      	; 0x3b4 <__vector_1+0xa4>
+				on_packet_IRQ(&buf[0], l); // вызываем обработчик полученного пакета
+ 3ac:	6f 2d       	mov	r22, r15
+ 3ae:	ce 01       	movw	r24, r28
+ 3b0:	01 96       	adiw	r24, 0x01	; 1
+ 3b2:	89 df       	rcall	.-238    	; 0x2c6 <on_packet_IRQ>
+			}
+		}
+		status = radio_cmd(NOP);
+ 3b4:	8f ef       	ldi	r24, 0xFF	; 255
+ 3b6:	de de       	rcall	.-580    	; 0x174 <radio_cmd>
+			radio_writereg(CONFIG, conf | (1 << PRIM_RX)); // Устанавливаем бит PRIM_RX: приём
+			radio_assert_ce(); // Высокий уровень на линии CE переводит радио-чип в режим приёма
+		}
+	}
+	uint8_t protect = 4; // В очереди FIFO не должно быть более 3 пакетов. Если больше, значит что-то не так
+	while (((status & (7 << RX_P_NO)) != (7 << RX_P_NO)) && protect--) { // Пока в очереди есть принятый пакет
+ 3b8:	18 2f       	mov	r17, r24
+ 3ba:	1e 70       	andi	r17, 0x0E	; 14
+ 3bc:	1e 30       	cpi	r17, 0x0E	; 14
+ 3be:	11 f0       	breq	.+4      	; 0x3c4 <__vector_1+0xb4>
+ 3c0:	01 50       	subi	r16, 0x01	; 1
+ 3c2:	21 f7       	brne	.-56     	; 0x38c <__vector_1+0x7c>
+			}
+		}
+		status = radio_cmd(NOP);
+	}
+	//PORTD	&= ~(1<<7);
+	sei();
+ 3c4:	78 94       	sei
+ 3c6:	04 c0       	rjmp	.+8      	; 0x3d0 <__vector_1+0xc0>
+			radio_writereg(CONFIG, conf | (1 << PRIM_RX)); // Устанавливаем бит PRIM_RX: приём
+			radio_assert_ce(); // Высокий уровень на линии CE переводит радио-чип в режим приёма
+		}
+	}
+	uint8_t protect = 4; // В очереди FIFO не должно быть более 3 пакетов. Если больше, значит что-то не так
+	while (((status & (7 << RX_P_NO)) != (7 << RX_P_NO)) && protect--) { // Пока в очереди есть принятый пакет
+ 3c8:	1e 70       	andi	r17, 0x0E	; 14
+ 3ca:	1e 30       	cpi	r17, 0x0E	; 14
+ 3cc:	f1 f6       	brne	.-68     	; 0x38a <__vector_1+0x7a>
+ 3ce:	fa cf       	rjmp	.-12     	; 0x3c4 <__vector_1+0xb4>
+		}
+		status = radio_cmd(NOP);
+	}
+	//PORTD	&= ~(1<<7);
+	sei();
+}
+ 3d0:	a0 96       	adiw	r28, 0x20	; 32
+ 3d2:	0f b6       	in	r0, 0x3f	; 63
+ 3d4:	f8 94       	cli
+ 3d6:	de bf       	out	0x3e, r29	; 62
+ 3d8:	0f be       	out	0x3f, r0	; 63
+ 3da:	cd bf       	out	0x3d, r28	; 61
+ 3dc:	df 91       	pop	r29
+ 3de:	cf 91       	pop	r28
+ 3e0:	ff 91       	pop	r31
+ 3e2:	ef 91       	pop	r30
+ 3e4:	bf 91       	pop	r27
+ 3e6:	af 91       	pop	r26
+ 3e8:	9f 91       	pop	r25
+ 3ea:	8f 91       	pop	r24
+ 3ec:	7f 91       	pop	r23
+ 3ee:	6f 91       	pop	r22
+ 3f0:	5f 91       	pop	r21
+ 3f2:	4f 91       	pop	r20
+ 3f4:	3f 91       	pop	r19
+ 3f6:	2f 91       	pop	r18
+ 3f8:	1f 91       	pop	r17
+ 3fa:	0f 91       	pop	r16
+ 3fc:	ff 90       	pop	r15
+ 3fe:	0f 90       	pop	r0
+ 400:	0f be       	out	0x3f, r0	; 63
+ 402:	0f 90       	pop	r0
+ 404:	1f 90       	pop	r1
+ 406:	18 95       	reti
+
+00000408 <main>:
+int main(void)
+{
+    
+    //Светодиоды
+    //led started
+    DDRD	|= 1<<6;
+ 408:	8e 9a       	sbi	0x11, 6	; 17
+    DDRD	|= 1<<7;
+ 40a:	8f 9a       	sbi	0x11, 7	; 17
+    
+    PORTD	|= 1<<6;
+ 40c:	96 9a       	sbi	0x12, 6	; 18
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 40e:	2f e3       	ldi	r18, 0x3F	; 63
+ 410:	8d e0       	ldi	r24, 0x0D	; 13
+ 412:	93 e0       	ldi	r25, 0x03	; 3
+ 414:	21 50       	subi	r18, 0x01	; 1
+ 416:	80 40       	sbci	r24, 0x00	; 0
+ 418:	90 40       	sbci	r25, 0x00	; 0
+ 41a:	e1 f7       	brne	.-8      	; 0x414 <main+0xc>
+ 41c:	00 c0       	rjmp	.+0      	; 0x41e <main+0x16>
+ 41e:	00 00       	nop
+    //PORTD	|= 1<<6;
+    //_delay_ms(1000);
+    //PORTD	&= ~(1<<6);
+    //_delay_ms(1000);
+    
+    radio_init();
+ 420:	2c de       	rcall	.-936    	; 0x7a <radio_init>
+    	
+    while (!radio_start()) {
+ 422:	0a c0       	rjmp	.+20     	; 0x438 <main+0x30>
+	    PORTD	&= ~(1<<6);
+ 424:	96 98       	cbi	0x12, 6	; 18
+ 426:	2f e3       	ldi	r18, 0x3F	; 63
+ 428:	8d e0       	ldi	r24, 0x0D	; 13
+ 42a:	93 e0       	ldi	r25, 0x03	; 3
+ 42c:	21 50       	subi	r18, 0x01	; 1
+ 42e:	80 40       	sbci	r24, 0x00	; 0
+ 430:	90 40       	sbci	r25, 0x00	; 0
+ 432:	e1 f7       	brne	.-8      	; 0x42c <main+0x24>
+ 434:	00 c0       	rjmp	.+0      	; 0x436 <main+0x2e>
+ 436:	00 00       	nop
+    //PORTD	&= ~(1<<6);
+    //_delay_ms(1000);
+    
+    radio_init();
+    	
+    while (!radio_start()) {
+ 438:	a1 de       	rcall	.-702    	; 0x17c <radio_start>
+ 43a:	88 23       	and	r24, r24
+ 43c:	99 f3       	breq	.-26     	; 0x424 <main+0x1c>
+	    PORTD	&= ~(1<<6);
+	    _delay_ms(1000);
+    }
+    PORTD	|= 1<<6;
+ 43e:	96 9a       	sbi	0x12, 6	; 18
+    
+	
+	//настраиваем на срабатывание INT0 по переднему фронту
+	MCUCR &= ~( (1<<ISC11)|(1<<ISC10)|(1<<ISC01)|(1<<ISC00) );
+ 440:	85 b7       	in	r24, 0x35	; 53
+ 442:	80 7f       	andi	r24, 0xF0	; 240
+ 444:	85 bf       	out	0x35, r24	; 53
+	//разрешаем внешнее прерывание INT0
+	GICR |= (1<<INT0);
+ 446:	8b b7       	in	r24, 0x3b	; 59
+ 448:	80 64       	ori	r24, 0x40	; 64
+ 44a:	8b bf       	out	0x3b, r24	; 59
+	
+	sei();
+ 44c:	78 94       	sei
+ 44e:	83 ef       	ldi	r24, 0xF3	; 243
+ 450:	91 e0       	ldi	r25, 0x01	; 1
+ 452:	01 97       	sbiw	r24, 0x01	; 1
+ 454:	f1 f7       	brne	.-4      	; 0x452 <main+0x4a>
+ 456:	00 c0       	rjmp	.+0      	; 0x458 <main+0x50>
+ 458:	00 00       	nop
+ 45a:	c0 9a       	sbi	0x18, 0	; 24
+				_delay_ms(1000);
+		    }
+		    PORTD	|= 1<<6;
+		    
+	    }*/
+    }
+ 45c:	ff cf       	rjmp	.-2      	; 0x45c <main+0x54>
+
+0000045e <_exit>:
+ 45e:	f8 94       	cli
+
+00000460 <__stop_program>:
+ 460:	ff cf       	rjmp	.-2      	; 0x460 <__stop_program>

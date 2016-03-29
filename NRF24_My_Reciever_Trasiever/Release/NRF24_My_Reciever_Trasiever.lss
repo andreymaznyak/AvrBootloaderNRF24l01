@@ -1,0 +1,613 @@
+
+NRF24_My_Reciever_Trasiever.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000044c  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000000a  00800060  0000044c  000004c0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000004ca  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000004fc  2**2
+                  CONTENTS, READONLY
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	24 c0       	rjmp	.+72     	; 0x4c <__bad_interrupt>
+   4:	23 c0       	rjmp	.+70     	; 0x4c <__bad_interrupt>
+   6:	22 c0       	rjmp	.+68     	; 0x4c <__bad_interrupt>
+   8:	21 c0       	rjmp	.+66     	; 0x4c <__bad_interrupt>
+   a:	20 c0       	rjmp	.+64     	; 0x4c <__bad_interrupt>
+   c:	1f c0       	rjmp	.+62     	; 0x4c <__bad_interrupt>
+   e:	1e c0       	rjmp	.+60     	; 0x4c <__bad_interrupt>
+  10:	1d c0       	rjmp	.+58     	; 0x4c <__bad_interrupt>
+  12:	1c c0       	rjmp	.+56     	; 0x4c <__bad_interrupt>
+  14:	1b c0       	rjmp	.+54     	; 0x4c <__bad_interrupt>
+  16:	1a c0       	rjmp	.+52     	; 0x4c <__bad_interrupt>
+  18:	19 c0       	rjmp	.+50     	; 0x4c <__bad_interrupt>
+  1a:	18 c0       	rjmp	.+48     	; 0x4c <__bad_interrupt>
+  1c:	17 c0       	rjmp	.+46     	; 0x4c <__bad_interrupt>
+  1e:	16 c0       	rjmp	.+44     	; 0x4c <__bad_interrupt>
+  20:	15 c0       	rjmp	.+42     	; 0x4c <__bad_interrupt>
+  22:	14 c0       	rjmp	.+40     	; 0x4c <__bad_interrupt>
+  24:	13 c0       	rjmp	.+38     	; 0x4c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	ec e4       	ldi	r30, 0x4C	; 76
+  3a:	f4 e0       	ldi	r31, 0x04	; 4
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	aa 36       	cpi	r26, 0x6A	; 106
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+  48:	d9 d1       	rcall	.+946    	; 0x3fc <main>
+  4a:	fe c1       	rjmp	.+1020   	; 0x448 <_exit>
+
+0000004c <__bad_interrupt>:
+  4c:	d9 cf       	rjmp	.-78     	; 0x0 <__vectors>
+
+0000004e <csn_assert>:
+  4e:	c1 98       	cbi	0x18, 1	; 24
+  50:	08 95       	ret
+
+00000052 <csn_deassert>:
+  52:	c1 9a       	sbi	0x18, 1	; 24
+  54:	08 95       	ret
+
+00000056 <spi_send_recv>:
+  56:	98 e0       	ldi	r25, 0x08	; 8
+  58:	87 ff       	sbrs	r24, 7
+  5a:	02 c0       	rjmp	.+4      	; 0x60 <spi_send_recv+0xa>
+  5c:	c3 9a       	sbi	0x18, 3	; 24
+  5e:	01 c0       	rjmp	.+2      	; 0x62 <spi_send_recv+0xc>
+  60:	c3 98       	cbi	0x18, 3	; 24
+  62:	c5 9a       	sbi	0x18, 5	; 24
+  64:	88 0f       	add	r24, r24
+  66:	b4 99       	sbic	0x16, 4	; 22
+  68:	81 60       	ori	r24, 0x01	; 1
+  6a:	c5 98       	cbi	0x18, 5	; 24
+  6c:	91 50       	subi	r25, 0x01	; 1
+  6e:	a1 f7       	brne	.-24     	; 0x58 <spi_send_recv+0x2>
+  70:	08 95       	ret
+
+00000072 <radio_init>:
+  72:	87 b3       	in	r24, 0x17	; 23
+  74:	83 60       	ori	r24, 0x03	; 3
+  76:	87 bb       	out	0x17, r24	; 23
+  78:	b8 98       	cbi	0x17, 0	; 23
+  7a:	eb df       	rcall	.-42     	; 0x52 <csn_deassert>
+  7c:	c0 98       	cbi	0x18, 0	; 24
+  7e:	88 b3       	in	r24, 0x18	; 24
+  80:	87 7d       	andi	r24, 0xD7	; 215
+  82:	88 bb       	out	0x18, r24	; 24
+  84:	87 b3       	in	r24, 0x17	; 23
+  86:	88 62       	ori	r24, 0x28	; 40
+  88:	87 bb       	out	0x17, r24	; 23
+  8a:	bc 98       	cbi	0x17, 4	; 23
+  8c:	c4 9a       	sbi	0x18, 4	; 24
+  8e:	08 95       	ret
+
+00000090 <radio_read_buf>:
+  90:	ef 92       	push	r14
+  92:	ff 92       	push	r15
+  94:	0f 93       	push	r16
+  96:	1f 93       	push	r17
+  98:	cf 93       	push	r28
+  9a:	df 93       	push	r29
+  9c:	00 d0       	rcall	.+0      	; 0x9e <radio_read_buf+0xe>
+  9e:	1f 92       	push	r1
+  a0:	cd b7       	in	r28, 0x3d	; 61
+  a2:	de b7       	in	r29, 0x3e	; 62
+  a4:	16 2f       	mov	r17, r22
+  a6:	4a 83       	std	Y+2, r20	; 0x02
+  a8:	7b 83       	std	Y+3, r23	; 0x03
+  aa:	89 83       	std	Y+1, r24	; 0x01
+  ac:	d0 df       	rcall	.-96     	; 0x4e <csn_assert>
+  ae:	89 81       	ldd	r24, Y+1	; 0x01
+  b0:	d2 df       	rcall	.-92     	; 0x56 <spi_send_recv>
+  b2:	08 2f       	mov	r16, r24
+  b4:	e1 2e       	mov	r14, r17
+  b6:	7b 81       	ldd	r23, Y+3	; 0x03
+  b8:	f7 2e       	mov	r15, r23
+  ba:	4a 81       	ldd	r20, Y+2	; 0x02
+  bc:	14 0f       	add	r17, r20
+  be:	1e 15       	cp	r17, r14
+  c0:	31 f0       	breq	.+12     	; 0xce <radio_read_buf+0x3e>
+  c2:	8f ef       	ldi	r24, 0xFF	; 255
+  c4:	c8 df       	rcall	.-112    	; 0x56 <spi_send_recv>
+  c6:	f7 01       	movw	r30, r14
+  c8:	81 93       	st	Z+, r24
+  ca:	7f 01       	movw	r14, r30
+  cc:	f8 cf       	rjmp	.-16     	; 0xbe <radio_read_buf+0x2e>
+  ce:	c1 df       	rcall	.-126    	; 0x52 <csn_deassert>
+  d0:	80 2f       	mov	r24, r16
+  d2:	0f 90       	pop	r0
+  d4:	0f 90       	pop	r0
+  d6:	0f 90       	pop	r0
+  d8:	df 91       	pop	r29
+  da:	cf 91       	pop	r28
+  dc:	1f 91       	pop	r17
+  de:	0f 91       	pop	r16
+  e0:	ff 90       	pop	r15
+  e2:	ef 90       	pop	r14
+  e4:	08 95       	ret
+
+000000e6 <radio_write_buf>:
+  e6:	ef 92       	push	r14
+  e8:	ff 92       	push	r15
+  ea:	0f 93       	push	r16
+  ec:	1f 93       	push	r17
+  ee:	cf 93       	push	r28
+  f0:	df 93       	push	r29
+  f2:	00 d0       	rcall	.+0      	; 0xf4 <radio_write_buf+0xe>
+  f4:	1f 92       	push	r1
+  f6:	cd b7       	in	r28, 0x3d	; 61
+  f8:	de b7       	in	r29, 0x3e	; 62
+  fa:	16 2f       	mov	r17, r22
+  fc:	4a 83       	std	Y+2, r20	; 0x02
+  fe:	7b 83       	std	Y+3, r23	; 0x03
+ 100:	89 83       	std	Y+1, r24	; 0x01
+ 102:	a5 df       	rcall	.-182    	; 0x4e <csn_assert>
+ 104:	89 81       	ldd	r24, Y+1	; 0x01
+ 106:	a7 df       	rcall	.-178    	; 0x56 <spi_send_recv>
+ 108:	08 2f       	mov	r16, r24
+ 10a:	e1 2e       	mov	r14, r17
+ 10c:	7b 81       	ldd	r23, Y+3	; 0x03
+ 10e:	f7 2e       	mov	r15, r23
+ 110:	4a 81       	ldd	r20, Y+2	; 0x02
+ 112:	14 0f       	add	r17, r20
+ 114:	1e 15       	cp	r17, r14
+ 116:	29 f0       	breq	.+10     	; 0x122 <radio_write_buf+0x3c>
+ 118:	f7 01       	movw	r30, r14
+ 11a:	81 91       	ld	r24, Z+
+ 11c:	7f 01       	movw	r14, r30
+ 11e:	9b df       	rcall	.-202    	; 0x56 <spi_send_recv>
+ 120:	f9 cf       	rjmp	.-14     	; 0x114 <radio_write_buf+0x2e>
+ 122:	97 df       	rcall	.-210    	; 0x52 <csn_deassert>
+ 124:	80 2f       	mov	r24, r16
+ 126:	0f 90       	pop	r0
+ 128:	0f 90       	pop	r0
+ 12a:	0f 90       	pop	r0
+ 12c:	df 91       	pop	r29
+ 12e:	cf 91       	pop	r28
+ 130:	1f 91       	pop	r17
+ 132:	0f 91       	pop	r16
+ 134:	ff 90       	pop	r15
+ 136:	ef 90       	pop	r14
+ 138:	08 95       	ret
+
+0000013a <radio_readreg>:
+ 13a:	cf 93       	push	r28
+ 13c:	df 93       	push	r29
+ 13e:	1f 92       	push	r1
+ 140:	cd b7       	in	r28, 0x3d	; 61
+ 142:	de b7       	in	r29, 0x3e	; 62
+ 144:	89 83       	std	Y+1, r24	; 0x01
+ 146:	83 df       	rcall	.-250    	; 0x4e <csn_assert>
+ 148:	89 81       	ldd	r24, Y+1	; 0x01
+ 14a:	8f 71       	andi	r24, 0x1F	; 31
+ 14c:	84 df       	rcall	.-248    	; 0x56 <spi_send_recv>
+ 14e:	8f ef       	ldi	r24, 0xFF	; 255
+ 150:	82 df       	rcall	.-252    	; 0x56 <spi_send_recv>
+ 152:	89 83       	std	Y+1, r24	; 0x01
+ 154:	7e df       	rcall	.-260    	; 0x52 <csn_deassert>
+ 156:	89 81       	ldd	r24, Y+1	; 0x01
+ 158:	0f 90       	pop	r0
+ 15a:	df 91       	pop	r29
+ 15c:	cf 91       	pop	r28
+ 15e:	08 95       	ret
+
+00000160 <radio_writereg>:
+ 160:	1f 93       	push	r17
+ 162:	cf 93       	push	r28
+ 164:	df 93       	push	r29
+ 166:	00 d0       	rcall	.+0      	; 0x168 <radio_writereg+0x8>
+ 168:	cd b7       	in	r28, 0x3d	; 61
+ 16a:	de b7       	in	r29, 0x3e	; 62
+ 16c:	6a 83       	std	Y+2, r22	; 0x02
+ 16e:	89 83       	std	Y+1, r24	; 0x01
+ 170:	6e df       	rcall	.-292    	; 0x4e <csn_assert>
+ 172:	89 81       	ldd	r24, Y+1	; 0x01
+ 174:	8f 71       	andi	r24, 0x1F	; 31
+ 176:	80 62       	ori	r24, 0x20	; 32
+ 178:	6e df       	rcall	.-292    	; 0x56 <spi_send_recv>
+ 17a:	18 2f       	mov	r17, r24
+ 17c:	6a 81       	ldd	r22, Y+2	; 0x02
+ 17e:	86 2f       	mov	r24, r22
+ 180:	6a df       	rcall	.-300    	; 0x56 <spi_send_recv>
+ 182:	67 df       	rcall	.-306    	; 0x52 <csn_deassert>
+ 184:	81 2f       	mov	r24, r17
+ 186:	0f 90       	pop	r0
+ 188:	0f 90       	pop	r0
+ 18a:	df 91       	pop	r29
+ 18c:	cf 91       	pop	r28
+ 18e:	1f 91       	pop	r17
+ 190:	08 95       	ret
+
+00000192 <radio_writereg_buf>:
+ 192:	8f 71       	andi	r24, 0x1F	; 31
+ 194:	80 62       	ori	r24, 0x20	; 32
+ 196:	a7 cf       	rjmp	.-178    	; 0xe6 <radio_write_buf>
+
+00000198 <radio_read_rx_payload_width>:
+ 198:	cf 93       	push	r28
+ 19a:	df 93       	push	r29
+ 19c:	1f 92       	push	r1
+ 19e:	cd b7       	in	r28, 0x3d	; 61
+ 1a0:	de b7       	in	r29, 0x3e	; 62
+ 1a2:	55 df       	rcall	.-342    	; 0x4e <csn_assert>
+ 1a4:	80 e6       	ldi	r24, 0x60	; 96
+ 1a6:	57 df       	rcall	.-338    	; 0x56 <spi_send_recv>
+ 1a8:	8f ef       	ldi	r24, 0xFF	; 255
+ 1aa:	55 df       	rcall	.-342    	; 0x56 <spi_send_recv>
+ 1ac:	89 83       	std	Y+1, r24	; 0x01
+ 1ae:	51 df       	rcall	.-350    	; 0x52 <csn_deassert>
+ 1b0:	89 81       	ldd	r24, Y+1	; 0x01
+ 1b2:	0f 90       	pop	r0
+ 1b4:	df 91       	pop	r29
+ 1b6:	cf 91       	pop	r28
+ 1b8:	08 95       	ret
+
+000001ba <radio_cmd>:
+ 1ba:	cf 93       	push	r28
+ 1bc:	df 93       	push	r29
+ 1be:	1f 92       	push	r1
+ 1c0:	cd b7       	in	r28, 0x3d	; 61
+ 1c2:	de b7       	in	r29, 0x3e	; 62
+ 1c4:	89 83       	std	Y+1, r24	; 0x01
+ 1c6:	43 df       	rcall	.-378    	; 0x4e <csn_assert>
+ 1c8:	89 81       	ldd	r24, Y+1	; 0x01
+ 1ca:	45 df       	rcall	.-374    	; 0x56 <spi_send_recv>
+ 1cc:	89 83       	std	Y+1, r24	; 0x01
+ 1ce:	41 df       	rcall	.-382    	; 0x52 <csn_deassert>
+ 1d0:	89 81       	ldd	r24, Y+1	; 0x01
+ 1d2:	0f 90       	pop	r0
+ 1d4:	df 91       	pop	r29
+ 1d6:	cf 91       	pop	r28
+ 1d8:	08 95       	ret
+
+000001da <radio_is_interrupt>:
+ 1da:	8f ef       	ldi	r24, 0xFF	; 255
+ 1dc:	ee df       	rcall	.-36     	; 0x1ba <radio_cmd>
+ 1de:	98 2f       	mov	r25, r24
+ 1e0:	90 77       	andi	r25, 0x70	; 112
+ 1e2:	81 e0       	ldi	r24, 0x01	; 1
+ 1e4:	09 f4       	brne	.+2      	; 0x1e8 <radio_is_interrupt+0xe>
+ 1e6:	80 e0       	ldi	r24, 0x00	; 0
+ 1e8:	08 95       	ret
+
+000001ea <radio_start>:
+ 1ea:	1f 93       	push	r17
+ 1ec:	cf 93       	push	r28
+ 1ee:	df 93       	push	r29
+ 1f0:	cd b7       	in	r28, 0x3d	; 61
+ 1f2:	de b7       	in	r29, 0x3e	; 62
+ 1f4:	2a 97       	sbiw	r28, 0x0a	; 10
+ 1f6:	0f b6       	in	r0, 0x3f	; 63
+ 1f8:	f8 94       	cli
+ 1fa:	de bf       	out	0x3e, r29	; 62
+ 1fc:	0f be       	out	0x3f, r0	; 63
+ 1fe:	cd bf       	out	0x3d, r28	; 61
+ 200:	85 e0       	ldi	r24, 0x05	; 5
+ 202:	e0 e6       	ldi	r30, 0x60	; 96
+ 204:	f0 e0       	ldi	r31, 0x00	; 0
+ 206:	de 01       	movw	r26, r28
+ 208:	16 96       	adiw	r26, 0x06	; 6
+ 20a:	01 90       	ld	r0, Z+
+ 20c:	0d 92       	st	X+, r0
+ 20e:	8a 95       	dec	r24
+ 210:	e1 f7       	brne	.-8      	; 0x20a <radio_start+0x20>
+ 212:	85 e0       	ldi	r24, 0x05	; 5
+ 214:	e5 e6       	ldi	r30, 0x65	; 101
+ 216:	f0 e0       	ldi	r31, 0x00	; 0
+ 218:	de 01       	movw	r26, r28
+ 21a:	11 96       	adiw	r26, 0x01	; 1
+ 21c:	01 90       	ld	r0, Z+
+ 21e:	0d 92       	st	X+, r0
+ 220:	8a 95       	dec	r24
+ 222:	e1 f7       	brne	.-8      	; 0x21c <radio_start+0x32>
+ 224:	c0 98       	cbi	0x18, 0	; 24
+ 226:	15 e6       	ldi	r17, 0x65	; 101
+ 228:	6d e0       	ldi	r22, 0x0D	; 13
+ 22a:	80 e0       	ldi	r24, 0x00	; 0
+ 22c:	99 df       	rcall	.-206    	; 0x160 <radio_writereg>
+ 22e:	80 e0       	ldi	r24, 0x00	; 0
+ 230:	84 df       	rcall	.-248    	; 0x13a <radio_readreg>
+ 232:	8d 30       	cpi	r24, 0x0D	; 13
+ 234:	51 f0       	breq	.+20     	; 0x24a <radio_start+0x60>
+ 236:	11 50       	subi	r17, 0x01	; 1
+ 238:	09 f4       	brne	.+2      	; 0x23c <radio_start+0x52>
+ 23a:	44 c0       	rjmp	.+136    	; 0x2c4 <radio_start+0xda>
+ 23c:	89 ef       	ldi	r24, 0xF9	; 249
+ 23e:	90 e0       	ldi	r25, 0x00	; 0
+ 240:	01 97       	sbiw	r24, 0x01	; 1
+ 242:	f1 f7       	brne	.-4      	; 0x240 <radio_start+0x56>
+ 244:	00 c0       	rjmp	.+0      	; 0x246 <radio_start+0x5c>
+ 246:	00 00       	nop
+ 248:	ef cf       	rjmp	.-34     	; 0x228 <radio_start+0x3e>
+ 24a:	81 ee       	ldi	r24, 0xE1	; 225
+ 24c:	b6 df       	rcall	.-148    	; 0x1ba <radio_cmd>
+ 24e:	82 ee       	ldi	r24, 0xE2	; 226
+ 250:	b4 df       	rcall	.-152    	; 0x1ba <radio_cmd>
+ 252:	62 e0       	ldi	r22, 0x02	; 2
+ 254:	81 e0       	ldi	r24, 0x01	; 1
+ 256:	84 df       	rcall	.-248    	; 0x160 <radio_writereg>
+ 258:	63 e0       	ldi	r22, 0x03	; 3
+ 25a:	82 e0       	ldi	r24, 0x02	; 2
+ 25c:	81 df       	rcall	.-254    	; 0x160 <radio_writereg>
+ 25e:	63 e0       	ldi	r22, 0x03	; 3
+ 260:	83 e0       	ldi	r24, 0x03	; 3
+ 262:	7e df       	rcall	.-260    	; 0x160 <radio_writereg>
+ 264:	6f e1       	ldi	r22, 0x1F	; 31
+ 266:	84 e0       	ldi	r24, 0x04	; 4
+ 268:	7b df       	rcall	.-266    	; 0x160 <radio_writereg>
+ 26a:	63 e0       	ldi	r22, 0x03	; 3
+ 26c:	85 e0       	ldi	r24, 0x05	; 5
+ 26e:	78 df       	rcall	.-272    	; 0x160 <radio_writereg>
+ 270:	66 e0       	ldi	r22, 0x06	; 6
+ 272:	86 e0       	ldi	r24, 0x06	; 6
+ 274:	75 df       	rcall	.-278    	; 0x160 <radio_writereg>
+ 276:	45 e0       	ldi	r20, 0x05	; 5
+ 278:	be 01       	movw	r22, r28
+ 27a:	6f 5f       	subi	r22, 0xFF	; 255
+ 27c:	7f 4f       	sbci	r23, 0xFF	; 255
+ 27e:	8a e0       	ldi	r24, 0x0A	; 10
+ 280:	88 df       	rcall	.-240    	; 0x192 <radio_writereg_buf>
+ 282:	45 e0       	ldi	r20, 0x05	; 5
+ 284:	be 01       	movw	r22, r28
+ 286:	6f 5f       	subi	r22, 0xFF	; 255
+ 288:	7f 4f       	sbci	r23, 0xFF	; 255
+ 28a:	80 e1       	ldi	r24, 0x10	; 16
+ 28c:	82 df       	rcall	.-252    	; 0x192 <radio_writereg_buf>
+ 28e:	45 e0       	ldi	r20, 0x05	; 5
+ 290:	be 01       	movw	r22, r28
+ 292:	6a 5f       	subi	r22, 0xFA	; 250
+ 294:	7f 4f       	sbci	r23, 0xFF	; 255
+ 296:	8b e0       	ldi	r24, 0x0B	; 11
+ 298:	7c df       	rcall	.-264    	; 0x192 <radio_writereg_buf>
+ 29a:	60 e2       	ldi	r22, 0x20	; 32
+ 29c:	81 e1       	ldi	r24, 0x11	; 17
+ 29e:	60 df       	rcall	.-320    	; 0x160 <radio_writereg>
+ 2a0:	60 e2       	ldi	r22, 0x20	; 32
+ 2a2:	82 e1       	ldi	r24, 0x12	; 18
+ 2a4:	5d df       	rcall	.-326    	; 0x160 <radio_writereg>
+ 2a6:	63 e0       	ldi	r22, 0x03	; 3
+ 2a8:	8c e1       	ldi	r24, 0x1C	; 28
+ 2aa:	5a df       	rcall	.-332    	; 0x160 <radio_writereg>
+ 2ac:	66 e0       	ldi	r22, 0x06	; 6
+ 2ae:	8d e1       	ldi	r24, 0x1D	; 29
+ 2b0:	57 df       	rcall	.-338    	; 0x160 <radio_writereg>
+ 2b2:	6f e0       	ldi	r22, 0x0F	; 15
+ 2b4:	80 e0       	ldi	r24, 0x00	; 0
+ 2b6:	54 df       	rcall	.-344    	; 0x160 <radio_writereg>
+ 2b8:	80 e0       	ldi	r24, 0x00	; 0
+ 2ba:	3f df       	rcall	.-386    	; 0x13a <radio_readreg>
+ 2bc:	11 e0       	ldi	r17, 0x01	; 1
+ 2be:	8f 30       	cpi	r24, 0x0F	; 15
+ 2c0:	09 f0       	breq	.+2      	; 0x2c4 <radio_start+0xda>
+ 2c2:	10 e0       	ldi	r17, 0x00	; 0
+ 2c4:	81 2f       	mov	r24, r17
+ 2c6:	2a 96       	adiw	r28, 0x0a	; 10
+ 2c8:	0f b6       	in	r0, 0x3f	; 63
+ 2ca:	f8 94       	cli
+ 2cc:	de bf       	out	0x3e, r29	; 62
+ 2ce:	0f be       	out	0x3f, r0	; 63
+ 2d0:	cd bf       	out	0x3d, r28	; 61
+ 2d2:	df 91       	pop	r29
+ 2d4:	cf 91       	pop	r28
+ 2d6:	1f 91       	pop	r17
+ 2d8:	08 95       	ret
+
+000002da <send_data>:
+ 2da:	1f 93       	push	r17
+ 2dc:	cf 93       	push	r28
+ 2de:	df 93       	push	r29
+ 2e0:	ec 01       	movw	r28, r24
+ 2e2:	16 2f       	mov	r17, r22
+ 2e4:	c0 98       	cbi	0x18, 0	; 24
+ 2e6:	80 e0       	ldi	r24, 0x00	; 0
+ 2e8:	28 df       	rcall	.-432    	; 0x13a <radio_readreg>
+ 2ea:	81 fd       	sbrc	r24, 1
+ 2ec:	02 c0       	rjmp	.+4      	; 0x2f2 <send_data+0x18>
+ 2ee:	80 e0       	ldi	r24, 0x00	; 0
+ 2f0:	10 c0       	rjmp	.+32     	; 0x312 <send_data+0x38>
+ 2f2:	68 2f       	mov	r22, r24
+ 2f4:	6e 7f       	andi	r22, 0xFE	; 254
+ 2f6:	80 e0       	ldi	r24, 0x00	; 0
+ 2f8:	33 df       	rcall	.-410    	; 0x160 <radio_writereg>
+ 2fa:	80 fd       	sbrc	r24, 0
+ 2fc:	f8 cf       	rjmp	.-16     	; 0x2ee <send_data+0x14>
+ 2fe:	41 2f       	mov	r20, r17
+ 300:	be 01       	movw	r22, r28
+ 302:	88 ea       	ldi	r24, 0xA8	; 168
+ 304:	f0 de       	rcall	.-544    	; 0xe6 <radio_write_buf>
+ 306:	c0 9a       	sbi	0x18, 0	; 24
+ 308:	85 e0       	ldi	r24, 0x05	; 5
+ 30a:	8a 95       	dec	r24
+ 30c:	f1 f7       	brne	.-4      	; 0x30a <send_data+0x30>
+ 30e:	c0 98       	cbi	0x18, 0	; 24
+ 310:	81 e0       	ldi	r24, 0x01	; 1
+ 312:	df 91       	pop	r29
+ 314:	cf 91       	pop	r28
+ 316:	1f 91       	pop	r17
+ 318:	08 95       	ret
+
+0000031a <on_send_error>:
+ 31a:	97 98       	cbi	0x12, 7	; 18
+ 31c:	2f e5       	ldi	r18, 0x5F	; 95
+ 31e:	8a ee       	ldi	r24, 0xEA	; 234
+ 320:	90 e0       	ldi	r25, 0x00	; 0
+ 322:	21 50       	subi	r18, 0x01	; 1
+ 324:	80 40       	sbci	r24, 0x00	; 0
+ 326:	90 40       	sbci	r25, 0x00	; 0
+ 328:	e1 f7       	brne	.-8      	; 0x322 <on_send_error+0x8>
+ 32a:	00 c0       	rjmp	.+0      	; 0x32c <on_send_error+0x12>
+ 32c:	00 00       	nop
+ 32e:	08 95       	ret
+
+00000330 <on_packet>:
+ 330:	ef e4       	ldi	r30, 0x4F	; 79
+ 332:	f3 ec       	ldi	r31, 0xC3	; 195
+ 334:	31 97       	sbiw	r30, 0x01	; 1
+ 336:	f1 f7       	brne	.-4      	; 0x334 <on_packet+0x4>
+ 338:	00 c0       	rjmp	.+0      	; 0x33a <on_packet+0xa>
+ 33a:	00 00       	nop
+ 33c:	fc 01       	movw	r30, r24
+ 33e:	20 81       	ld	r18, Z
+ 340:	2f 5f       	subi	r18, 0xFF	; 255
+ 342:	20 83       	st	Z, r18
+ 344:	61 83       	std	Z+1, r22	; 0x01
+ 346:	c9 cf       	rjmp	.-110    	; 0x2da <send_data>
+
+00000348 <check_radio>:
+ 348:	ff 92       	push	r15
+ 34a:	0f 93       	push	r16
+ 34c:	1f 93       	push	r17
+ 34e:	cf 93       	push	r28
+ 350:	df 93       	push	r29
+ 352:	cd b7       	in	r28, 0x3d	; 61
+ 354:	de b7       	in	r29, 0x3e	; 62
+ 356:	a0 97       	sbiw	r28, 0x20	; 32
+ 358:	0f b6       	in	r0, 0x3f	; 63
+ 35a:	f8 94       	cli
+ 35c:	de bf       	out	0x3e, r29	; 62
+ 35e:	0f be       	out	0x3f, r0	; 63
+ 360:	cd bf       	out	0x3d, r28	; 61
+ 362:	3b df       	rcall	.-394    	; 0x1da <radio_is_interrupt>
+ 364:	88 23       	and	r24, r24
+ 366:	09 f4       	brne	.+2      	; 0x36a <check_radio+0x22>
+ 368:	3d c0       	rjmp	.+122    	; 0x3e4 <check_radio+0x9c>
+ 36a:	8f ef       	ldi	r24, 0xFF	; 255
+ 36c:	26 df       	rcall	.-436    	; 0x1ba <radio_cmd>
+ 36e:	18 2f       	mov	r17, r24
+ 370:	68 2f       	mov	r22, r24
+ 372:	87 e0       	ldi	r24, 0x07	; 7
+ 374:	f5 de       	rcall	.-534    	; 0x160 <radio_writereg>
+ 376:	81 2f       	mov	r24, r17
+ 378:	80 73       	andi	r24, 0x30	; 48
+ 37a:	b1 f0       	breq	.+44     	; 0x3a8 <check_radio+0x60>
+ 37c:	14 ff       	sbrs	r17, 4
+ 37e:	03 c0       	rjmp	.+6      	; 0x386 <check_radio+0x3e>
+ 380:	81 ee       	ldi	r24, 0xE1	; 225
+ 382:	1b df       	rcall	.-458    	; 0x1ba <radio_cmd>
+ 384:	ca df       	rcall	.-108    	; 0x31a <on_send_error>
+ 386:	87 e1       	ldi	r24, 0x17	; 23
+ 388:	d8 de       	rcall	.-592    	; 0x13a <radio_readreg>
+ 38a:	84 fd       	sbrc	r24, 4
+ 38c:	06 c0       	rjmp	.+12     	; 0x39a <check_radio+0x52>
+ 38e:	c0 9a       	sbi	0x18, 0	; 24
+ 390:	85 e0       	ldi	r24, 0x05	; 5
+ 392:	8a 95       	dec	r24
+ 394:	f1 f7       	brne	.-4      	; 0x392 <check_radio+0x4a>
+ 396:	c0 98       	cbi	0x18, 0	; 24
+ 398:	07 c0       	rjmp	.+14     	; 0x3a8 <check_radio+0x60>
+ 39a:	80 e0       	ldi	r24, 0x00	; 0
+ 39c:	ce de       	rcall	.-612    	; 0x13a <radio_readreg>
+ 39e:	68 2f       	mov	r22, r24
+ 3a0:	61 60       	ori	r22, 0x01	; 1
+ 3a2:	80 e0       	ldi	r24, 0x00	; 0
+ 3a4:	dd de       	rcall	.-582    	; 0x160 <radio_writereg>
+ 3a6:	c0 9a       	sbi	0x18, 0	; 24
+ 3a8:	05 e0       	ldi	r16, 0x05	; 5
+ 3aa:	1e 70       	andi	r17, 0x0E	; 14
+ 3ac:	1e 30       	cpi	r17, 0x0E	; 14
+ 3ae:	d1 f0       	breq	.+52     	; 0x3e4 <check_radio+0x9c>
+ 3b0:	01 50       	subi	r16, 0x01	; 1
+ 3b2:	c1 f0       	breq	.+48     	; 0x3e4 <check_radio+0x9c>
+ 3b4:	f1 de       	rcall	.-542    	; 0x198 <radio_read_rx_payload_width>
+ 3b6:	f8 2e       	mov	r15, r24
+ 3b8:	80 e2       	ldi	r24, 0x20	; 32
+ 3ba:	8f 15       	cp	r24, r15
+ 3bc:	18 f4       	brcc	.+6      	; 0x3c4 <check_radio+0x7c>
+ 3be:	82 ee       	ldi	r24, 0xE2	; 226
+ 3c0:	fc de       	rcall	.-520    	; 0x1ba <radio_cmd>
+ 3c2:	0c c0       	rjmp	.+24     	; 0x3dc <check_radio+0x94>
+ 3c4:	4f 2d       	mov	r20, r15
+ 3c6:	be 01       	movw	r22, r28
+ 3c8:	6f 5f       	subi	r22, 0xFF	; 255
+ 3ca:	7f 4f       	sbci	r23, 0xFF	; 255
+ 3cc:	81 e6       	ldi	r24, 0x61	; 97
+ 3ce:	60 de       	rcall	.-832    	; 0x90 <radio_read_buf>
+ 3d0:	12 30       	cpi	r17, 0x02	; 2
+ 3d2:	21 f4       	brne	.+8      	; 0x3dc <check_radio+0x94>
+ 3d4:	6f 2d       	mov	r22, r15
+ 3d6:	ce 01       	movw	r24, r28
+ 3d8:	01 96       	adiw	r24, 0x01	; 1
+ 3da:	aa df       	rcall	.-172    	; 0x330 <on_packet>
+ 3dc:	8f ef       	ldi	r24, 0xFF	; 255
+ 3de:	ed de       	rcall	.-550    	; 0x1ba <radio_cmd>
+ 3e0:	18 2f       	mov	r17, r24
+ 3e2:	e3 cf       	rjmp	.-58     	; 0x3aa <check_radio+0x62>
+ 3e4:	a0 96       	adiw	r28, 0x20	; 32
+ 3e6:	0f b6       	in	r0, 0x3f	; 63
+ 3e8:	f8 94       	cli
+ 3ea:	de bf       	out	0x3e, r29	; 62
+ 3ec:	0f be       	out	0x3f, r0	; 63
+ 3ee:	cd bf       	out	0x3d, r28	; 61
+ 3f0:	df 91       	pop	r29
+ 3f2:	cf 91       	pop	r28
+ 3f4:	1f 91       	pop	r17
+ 3f6:	0f 91       	pop	r16
+ 3f8:	ff 90       	pop	r15
+ 3fa:	08 95       	ret
+
+000003fc <main>:
+ 3fc:	8e 9a       	sbi	0x11, 6	; 17
+ 3fe:	8f 9a       	sbi	0x11, 7	; 17
+ 400:	96 9a       	sbi	0x12, 6	; 18
+ 402:	2f e3       	ldi	r18, 0x3F	; 63
+ 404:	8d e0       	ldi	r24, 0x0D	; 13
+ 406:	93 e0       	ldi	r25, 0x03	; 3
+ 408:	21 50       	subi	r18, 0x01	; 1
+ 40a:	80 40       	sbci	r24, 0x00	; 0
+ 40c:	90 40       	sbci	r25, 0x00	; 0
+ 40e:	e1 f7       	brne	.-8      	; 0x408 <main+0xc>
+ 410:	00 c0       	rjmp	.+0      	; 0x412 <main+0x16>
+ 412:	00 00       	nop
+ 414:	2e de       	rcall	.-932    	; 0x72 <radio_init>
+ 416:	e9 de       	rcall	.-558    	; 0x1ea <radio_start>
+ 418:	81 11       	cpse	r24, r1
+ 41a:	0b c0       	rjmp	.+22     	; 0x432 <main+0x36>
+ 41c:	96 98       	cbi	0x12, 6	; 18
+ 41e:	2f e3       	ldi	r18, 0x3F	; 63
+ 420:	8d e0       	ldi	r24, 0x0D	; 13
+ 422:	93 e0       	ldi	r25, 0x03	; 3
+ 424:	21 50       	subi	r18, 0x01	; 1
+ 426:	80 40       	sbci	r24, 0x00	; 0
+ 428:	90 40       	sbci	r25, 0x00	; 0
+ 42a:	e1 f7       	brne	.-8      	; 0x424 <main+0x28>
+ 42c:	00 c0       	rjmp	.+0      	; 0x42e <main+0x32>
+ 42e:	00 00       	nop
+ 430:	f2 cf       	rjmp	.-28     	; 0x416 <main+0x1a>
+ 432:	96 9a       	sbi	0x12, 6	; 18
+ 434:	83 ef       	ldi	r24, 0xF3	; 243
+ 436:	91 e0       	ldi	r25, 0x01	; 1
+ 438:	01 97       	sbiw	r24, 0x01	; 1
+ 43a:	f1 f7       	brne	.-4      	; 0x438 <main+0x3c>
+ 43c:	00 c0       	rjmp	.+0      	; 0x43e <main+0x42>
+ 43e:	00 00       	nop
+ 440:	c0 9a       	sbi	0x18, 0	; 24
+ 442:	97 9a       	sbi	0x12, 7	; 18
+ 444:	81 df       	rcall	.-254    	; 0x348 <check_radio>
+ 446:	fd cf       	rjmp	.-6      	; 0x442 <main+0x46>
+
+00000448 <_exit>:
+ 448:	f8 94       	cli
+
+0000044a <__stop_program>:
+ 44a:	ff cf       	rjmp	.-2      	; 0x44a <__stop_program>
